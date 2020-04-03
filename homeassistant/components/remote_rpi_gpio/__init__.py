@@ -11,12 +11,12 @@ CONF_INVERT_LOGIC = "invert_logic"
 CONF_PULL_MODE = "pull_mode"
 CONF_PULL_MODE_UP = "UP"
 CONF_PULL_MODE_DOWN = "DOWN"
-CONF_PULL_MODE_OFF = "OFF"
+CONF_PULL_MODE_OFF = ["OFF", False]
 
 DEFAULT_BOUNCETIME = 50
 DEFAULT_INVERT_LOGIC = False
 DEFAULT_PULL_MODE = CONF_PULL_MODE_UP
-PULL_MODES = [CONF_PULL_MODE_UP, CONF_PULL_MODE_DOWN, CONF_PULL_MODE_OFF]
+PULL_MODES = [CONF_PULL_MODE_UP, CONF_PULL_MODE_DOWN] + CONF_PULL_MODE_OFF
 
 DOMAIN = "remote_rpi_gpio"
 
@@ -30,7 +30,7 @@ def setup_output(address, port, invert_logic):
     """Set up a GPIO as output."""
 
     try:
-        return LED(port, active_high=invert_logic, pin_factory=PiGPIOFactory(address))
+        return LED(port, initial_value=invert_logic, pin_factory=PiGPIOFactory(address))
     except (ValueError, IndexError, KeyError):
         return None
 
@@ -49,7 +49,7 @@ def setup_input(address, port, pull_mode, bouncetime):
         return Button(
             port,
             pull_up=pull_gpio_up,
-            active_state=True if pull_mode == CONF_PULL_MODE_OFF else None,
+            active_state=True if pull_mode in CONF_PULL_MODE_OFF else None,
             bounce_time=bouncetime,
             pin_factory=PiGPIOFactory(address),
         )

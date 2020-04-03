@@ -62,8 +62,10 @@ class RPiGPIOBinarySensor(BinarySensorDevice):
         self._bouncetime = bouncetime
         self._invert_logic = invert_logic
         self._state = None
-
         rpi_gpio.setup_input(self._port, self._pull_mode)
+
+    async def async_added_to_hass(self):
+        """Handle entity which will be added."""
 
         def read_gpio(port):
             """Read state from GPIO."""

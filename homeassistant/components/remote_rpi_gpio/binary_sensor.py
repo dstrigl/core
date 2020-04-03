@@ -66,9 +66,9 @@ class RemoteRPiGPIOBinarySensor(BinarySensorDevice):
     def __init__(self, name, button, invert_logic):
         """Initialize the RPi binary sensor."""
         self._name = name
+        self._button = button
         self._invert_logic = invert_logic
         self._state = False
-        self._button = button
 
     async def async_added_to_hass(self):
         """Run when entity about to be added to hass."""

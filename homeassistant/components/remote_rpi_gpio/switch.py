@@ -3,9 +3,10 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components.switch import PLATFORM_SCHEMA, SwitchDevice
+from homeassistant.components.switch import PLATFORM_SCHEMA
 from homeassistant.const import CONF_HOST, DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.entity import ToggleEntity
 
 from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
 from .. import remote_rpi_gpio
@@ -43,15 +44,15 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices)
 
 
-class RemoteRPiGPIOSwitch(SwitchDevice):
+class RemoteRPiGPIOSwitch(ToggleEntity):
     """Representation of a Remtoe Raspberry Pi GPIO."""
 
     def __init__(self, name, led, invert_logic):
         """Initialize the pin."""
         self._name = name or DEVICE_DEFAULT_NAME
-        self._state = False
-        self._invert_logic = invert_logic
         self._switch = led
+        self._invert_logic = invert_logic
+        self._state = False
 
     @property
     def name(self):
@@ -62,11 +63,6 @@ class RemoteRPiGPIOSwitch(SwitchDevice):
     def should_poll(self):
         """No polling needed."""
         return False
-
-    @property
-    def assumed_state(self):
-        """If unable to access real state of the entity."""
-        return True
 
     @property
     def is_on(self):
