@@ -9,10 +9,14 @@ _LOGGER = logging.getLogger(__name__)
 CONF_BOUNCETIME = "bouncetime"
 CONF_INVERT_LOGIC = "invert_logic"
 CONF_PULL_MODE = "pull_mode"
+CONF_PULL_MODE_UP = "UP"
+CONF_PULL_MODE_DOWN = "DOWN"
+CONF_PULL_MODE_OFF = "OFF"
 
 DEFAULT_BOUNCETIME = 50
 DEFAULT_INVERT_LOGIC = False
-DEFAULT_PULL_MODE = "UP"
+DEFAULT_PULL_MODE = CONF_PULL_MODE_UP
+PULL_MODES = [CONF_PULL_MODE_UP, CONF_PULL_MODE_DOWN, CONF_PULL_MODE_OFF]
 
 DOMAIN = "remote_rpi_gpio"
 
@@ -34,15 +38,18 @@ def setup_output(address, port, invert_logic):
 def setup_input(address, port, pull_mode, bouncetime):
     """Set up a GPIO as input."""
 
-    if pull_mode == "UP":
+    if pull_mode == CONF_PULL_MODE_UP:
         pull_gpio_up = True
-    elif pull_mode == "DOWN":
+    elif pull_mode == CONF_PULL_MODE_DOWN:
         pull_gpio_up = False
+    else:  # for CONF_PULL_MODE_OFF
+        pull_gpio_up = None
 
     try:
         return Button(
             port,
             pull_up=pull_gpio_up,
+            active_state=True if pull_mode == CONF_PULL_MODE_OFF else None,
             bounce_time=bouncetime,
             pin_factory=PiGPIOFactory(address),
         )

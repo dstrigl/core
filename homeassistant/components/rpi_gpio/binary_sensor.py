@@ -3,21 +3,24 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components import rpi_gpio
 from homeassistant.components.binary_sensor import PLATFORM_SCHEMA, BinarySensorDevice
 from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
 
+from . import (
+    CONF_BOUNCETIME,
+    CONF_INVERT_LOGIC,
+    CONF_PULL_MODE,
+    DEFAULT_BOUNCETIME,
+    DEFAULT_INVERT_LOGIC,
+    DEFAULT_PULL_MODE,
+    PULL_MODES,
+)
+from .. import rpi_gpio
+
 _LOGGER = logging.getLogger(__name__)
 
-CONF_BOUNCETIME = "bouncetime"
-CONF_INVERT_LOGIC = "invert_logic"
 CONF_PORTS = "ports"
-CONF_PULL_MODE = "pull_mode"
-
-DEFAULT_BOUNCETIME = 50
-DEFAULT_INVERT_LOGIC = False
-DEFAULT_PULL_MODE = "UP"
 
 _SENSORS_SCHEMA = vol.Schema({cv.positive_int: cv.string})
 
@@ -26,7 +29,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Required(CONF_PORTS): _SENSORS_SCHEMA,
         vol.Optional(CONF_BOUNCETIME, default=DEFAULT_BOUNCETIME): cv.positive_int,
         vol.Optional(CONF_INVERT_LOGIC, default=DEFAULT_INVERT_LOGIC): cv.boolean,
-        vol.Optional(CONF_PULL_MODE, default=DEFAULT_PULL_MODE): cv.string,
+        vol.Optional(CONF_PULL_MODE, default=DEFAULT_PULL_MODE): vol.In(PULL_MODES),
     }
 )
 

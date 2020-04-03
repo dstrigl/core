@@ -7,6 +7,18 @@ from homeassistant.const import EVENT_HOMEASSISTANT_START, EVENT_HOMEASSISTANT_S
 
 _LOGGER = logging.getLogger(__name__)
 
+CONF_BOUNCETIME = "bouncetime"
+CONF_INVERT_LOGIC = "invert_logic"
+CONF_PULL_MODE = "pull_mode"
+CONF_PULL_MODE_UP = "UP"
+CONF_PULL_MODE_DOWN = "DOWN"
+CONF_PULL_MODE_OFF = "OFF"
+
+DEFAULT_BOUNCETIME = 50
+DEFAULT_INVERT_LOGIC = False
+DEFAULT_PULL_MODE = CONF_PULL_MODE_UP
+PULL_MODES = [CONF_PULL_MODE_UP, CONF_PULL_MODE_DOWN, CONF_PULL_MODE_OFF]
+
 DOMAIN = "rpi_gpio"
 
 
@@ -33,7 +45,13 @@ def setup_output(port):
 
 def setup_input(port, pull_mode):
     """Set up a GPIO as input."""
-    GPIO.setup(port, GPIO.IN, GPIO.PUD_DOWN if pull_mode == "DOWN" else GPIO.PUD_UP)
+    if pull_mode == CONF_PULL_MODE_UP:
+        pull_up_down = GPIO.PUD_UP
+    elif pull_mode == CONF_PULL_MODE_DOWN:
+        pull_up_down = GPIO.PUD_DOWN
+    else:  # for CONF_PULL_MODE_OFF
+        pull_up_down = GPIO.PUD_OFF
+    GPIO.setup(port, GPIO.IN, pull_up_down)
 
 
 def write_output(port, value):

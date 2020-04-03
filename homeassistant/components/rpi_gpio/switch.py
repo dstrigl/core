@@ -3,19 +3,17 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components import rpi_gpio
 from homeassistant.components.switch import PLATFORM_SCHEMA
 from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import ToggleEntity
 
+from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
+from .. import rpi_gpio
+
 _LOGGER = logging.getLogger(__name__)
 
-CONF_PULL_MODE = "pull_mode"
 CONF_PORTS = "ports"
-CONF_INVERT_LOGIC = "invert_logic"
-
-DEFAULT_INVERT_LOGIC = False
 
 _SWITCHES_SCHEMA = vol.Schema({cv.positive_int: cv.string})
 

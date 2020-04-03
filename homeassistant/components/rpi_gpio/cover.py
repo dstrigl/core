@@ -4,10 +4,12 @@ from time import sleep
 
 import voluptuous as vol
 
-from homeassistant.components import rpi_gpio
 from homeassistant.components.cover import PLATFORM_SCHEMA, CoverDevice
 from homeassistant.const import CONF_NAME
 import homeassistant.helpers.config_validation as cv
+
+from . import DEFAULT_PULL_MODE, PULL_MODES
+from .. import rpi_gpio
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +22,7 @@ CONF_INVERT_STATE = "invert_state"
 CONF_INVERT_RELAY = "invert_relay"
 
 DEFAULT_RELAY_TIME = 0.2
-DEFAULT_STATE_PULL_MODE = "UP"
+DEFAULT_STATE_PULL_MODE = DEFAULT_PULL_MODE
 DEFAULT_INVERT_STATE = False
 DEFAULT_INVERT_RELAY = False
 _COVERS_SCHEMA = vol.All(
@@ -39,7 +41,7 @@ _COVERS_SCHEMA = vol.All(
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_COVERS): _COVERS_SCHEMA,
-        vol.Optional(CONF_STATE_PULL_MODE, default=DEFAULT_STATE_PULL_MODE): cv.string,
+        vol.Optional(CONF_STATE_PULL_MODE, default=DEFAULT_STATE_PULL_MODE): vol.In(PULL_MODES),
         vol.Optional(CONF_RELAY_TIME, default=DEFAULT_RELAY_TIME): cv.positive_int,
         vol.Optional(CONF_INVERT_STATE, default=DEFAULT_INVERT_STATE): cv.boolean,
         vol.Optional(CONF_INVERT_RELAY, default=DEFAULT_INVERT_RELAY): cv.boolean,
