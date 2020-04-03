@@ -27,10 +27,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Raspberry PI GPIO devices."""
-    invert_logic = config.get(CONF_INVERT_LOGIC)
+    invert_logic = config[CONF_INVERT_LOGIC]
 
     switches = []
-    ports = config.get(CONF_PORTS)
+    ports = config[CONF_PORTS]
     for port, name in ports.items():
         switches.append(RPiGPIOSwitch(name, port, invert_logic))
     add_entities(switches)
