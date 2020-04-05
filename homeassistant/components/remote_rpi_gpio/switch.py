@@ -33,12 +33,13 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     ports = config[CONF_PORTS]
 
     devices = []
-    for port, name in ports.items():
+    for port_num, port_name in ports.items():
         try:
-            led = remote_rpi_gpio.setup_output(address, port, invert_logic)
+            led = remote_rpi_gpio.setup_output(address, port_num, invert_logic)
         except (ValueError, IndexError, KeyError, OSError):
-            return
-        new_switch = RemoteRPiGPIOSwitch(name, led, invert_logic)
+            _LOGGER.exception("Unexpected error while setting up Remote GPIO output %d @ %s", port_num, address)
+            continue
+        new_switch = RemoteRPiGPIOSwitch(port_name, led, invert_logic)
         devices.append(new_switch)
 
     add_entities(devices)

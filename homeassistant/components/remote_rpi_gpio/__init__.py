@@ -28,40 +28,31 @@ def setup(hass, config):
 
 def setup_output(address, port, invert_logic):
     """Set up a GPIO as output."""
-
-    try:
-        return LED(port, initial_value=invert_logic, pin_factory=PiGPIOFactory(address))
-    except (ValueError, IndexError, KeyError):
-        return None
+    return LED(port, initial_value=invert_logic, pin_factory=PiGPIOFactory(address))
 
 
 def setup_input(address, port, pull_mode, bouncetime):
     """Set up a GPIO as input."""
-
     if pull_mode == CONF_PULL_MODE_UP:
         pull_gpio_up = True
     elif pull_mode == CONF_PULL_MODE_DOWN:
         pull_gpio_up = False
     else:  # for CONF_PULL_MODE_OFF
         pull_gpio_up = None
-
-    try:
-        return Button(
-            port,
-            pull_up=pull_gpio_up,
-            active_state=True if pull_mode in CONF_PULL_MODE_OFF else None,
-            bounce_time=bouncetime,
-            pin_factory=PiGPIOFactory(address),
-        )
-    except (ValueError, IndexError, KeyError, OSError):
-        return None
+    return Button(
+        port,
+        pull_up=pull_gpio_up,
+        active_state=True if pull_mode in CONF_PULL_MODE_OFF else None,
+        bounce_time=bouncetime,
+        pin_factory=PiGPIOFactory(address),
+    )
 
 
 def write_output(switch, value):
     """Write a value to a GPIO."""
     if value == 1:
         switch.on()
-    if value == 0:
+    elif value == 0:
         switch.off()
 
 

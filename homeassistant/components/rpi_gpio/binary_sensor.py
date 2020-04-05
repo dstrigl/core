@@ -61,7 +61,7 @@ class RPiGPIOBinarySensor(BinarySensorDevice):
         self._pull_mode = pull_mode
         self._bouncetime = bouncetime
         self._invert_logic = invert_logic
-        self._state = None
+        self._state = False
         rpi_gpio.setup_input(self._port, self._pull_mode)
 
     async def async_added_to_hass(self):

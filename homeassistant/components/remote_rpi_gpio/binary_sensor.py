@@ -52,8 +52,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 address, port_num, pull_mode, bouncetime
             )
         except (ValueError, IndexError, KeyError, OSError):
-            return
+            _LOGGER.exception("Unexpected error while setting up Remote GPIO input %d @ %s", port_num, address)
+            continue
         # invert the 'invert_logic' in case of pull_mode UP, because of the behaviour of gpiozero.Button
+        #   and because that remote_rpi_gpio.read_input() is based on gpiozero.Button.is_pressed
         new_sensor = RemoteRPiGPIOBinarySensor(port_name, button, invert_logic != (pull_mode == CONF_PULL_MODE_UP))
         devices.append(new_sensor)
 
@@ -96,14 +98,10 @@ class RemoteRPiGPIOBinarySensor(BinarySensorDevice):
         """Return the state of the entity."""
         return self._state != self._invert_logic
 
-    @property
-    def device_class(self):
-        """Return the class of this sensor, from DEVICE_CLASSES."""
-        return
-
     def update(self):
         """Update the GPIO state."""
         try:
             self._state = remote_rpi_gpio.read_input(self._button)
         except requests.exceptions.ConnectionError:
-            return
+            _LOGGER.exception("Error while updating state of Remote GPIO input '%s'", self._name)
+            pass
