@@ -87,7 +87,7 @@ class PioneerDevice(MediaPlayerDevice):
         self._muted = False
         self._selected_source = ""
         self._source_name_to_number = sources
-        self._source_number_to_name = dict((v, k) for k, v in sources.items())
+        self._source_number_to_name = {v: k for k, v in sources.items()}
 
     @classmethod
     def telnet_request(cls, telnet, command, expected_prefix):
@@ -142,7 +142,7 @@ class PioneerDevice(MediaPlayerDevice):
         # Build the source name dictionaries if necessary
         if not self._source_name_to_number:
             for i in range(MAX_SOURCE_NUMBERS):
-                result = self.telnet_request(telnet, "?RGB" + str(i).zfill(2), "RGB")
+                result = self.telnet_request(telnet, f"?RGB{str(i).zfill(2)}", "RGB")
 
                 if not result:
                     continue

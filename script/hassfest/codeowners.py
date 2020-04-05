@@ -52,7 +52,7 @@ def generate_and_validate(integrations: Dict[str, Integration]):
             "homeassistant/components/{}/* {}".format(domain, " ".join(codeowners))
         )
 
-    parts.append("\n" + INDIVIDUAL_FILES.strip())
+    parts.append(f"\n{INDIVIDUAL_FILES.strip()}")
 
     return "\n".join(parts)
 
@@ -76,4 +76,4 @@ def generate(integrations: Dict[str, Integration], config: Config):
     """Generate CODEOWNERS."""
     codeowners_path = config.root / "CODEOWNERS"
     with open(str(codeowners_path), "w") as fp:
-        fp.write(config.cache["codeowners"] + "\n")
+        fp.write(f"{config.cache['codeowners']}\n")

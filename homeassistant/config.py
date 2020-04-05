@@ -339,7 +339,7 @@ def process_ha_config_upgrade(hass: HomeAssistant) -> None:
     version_path = hass.config.path(VERSION_FILE)
 
     try:
-        with open(version_path, "rt") as inp:
+        with open(version_path) as inp:
             conf_version = inp.readline().strip()
     except FileNotFoundError:
         # Last version to not have this file
@@ -364,7 +364,7 @@ def process_ha_config_upgrade(hass: HomeAssistant) -> None:
         # 0.92 moved google/tts.py to google_translate/tts.py
         config_path = hass.config.path(YAML_CONFIG_FILE)
 
-        with open(config_path, "rt", encoding="utf-8") as config_file:
+        with open(config_path, encoding="utf-8") as config_file:
             config_raw = config_file.read()
 
         if TTS_PRE_92 in config_raw:
@@ -375,7 +375,6 @@ def process_ha_config_upgrade(hass: HomeAssistant) -> None:
                     config_file.write(config_raw)
             except OSError:
                 _LOGGER.exception("Migrating to google_translate tts failed")
-                pass
 
     if version_obj < LooseVersion("0.94") and is_docker_env():
         # In 0.94 we no longer install packages inside the deps folder when
@@ -814,6 +813,7 @@ async def async_check_ha_config_file(hass: HomeAssistant) -> Optional[str]:
 
     This method is a coroutine.
     """
+    # pylint: disable=import-outside-toplevel
     import homeassistant.helpers.check_config as check_config
 
     res = await check_config.async_check_ha_config_file(hass)
@@ -831,6 +831,7 @@ def async_notify_setup_error(
 
     This method must be run in the event loop.
     """
+    # pylint: disable=import-outside-toplevel
     from homeassistant.components import persistent_notification
 
     errors = hass.data.get(DATA_PERSISTENT_ERRORS)

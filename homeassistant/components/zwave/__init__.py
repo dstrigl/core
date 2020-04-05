@@ -1,4 +1,5 @@
 """Support for Z-Wave."""
+# pylint: disable=import-outside-toplevel
 import asyncio
 import copy
 from importlib import import_module
@@ -1208,7 +1209,6 @@ class ZWaveDeviceEntity(ZWaveBaseEntity):
 
     def value_added(self):
         """Handle a new value of this entity."""
-        pass
 
     def value_changed(self):
         """Handle a changed value for this entity's node."""
@@ -1262,7 +1262,6 @@ class ZWaveDeviceEntity(ZWaveBaseEntity):
 
     def update_properties(self):
         """Update on data changes for node values."""
-        pass
 
     @property
     def should_poll(self):

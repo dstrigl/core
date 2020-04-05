@@ -127,8 +127,8 @@ def gather_recursive_requirements(domain, seen=None):
     seen.add(domain)
     integration = Integration(Path(f"homeassistant/components/{domain}"))
     integration.load_manifest()
-    reqs = set(integration.manifest["requirements"])
-    for dep_domain in integration.manifest["dependencies"]:
+    reqs = set(integration.requirements)
+    for dep_domain in integration.dependencies:
         reqs.update(gather_recursive_requirements(dep_domain, seen))
     return reqs
 
@@ -170,7 +170,7 @@ def gather_requirements_from_manifests(errors, reqs):
 
         process_requirements(
             errors,
-            integration.manifest["requirements"],
+            integration.requirements,
             f"homeassistant.components.{domain}",
             reqs,
         )
@@ -262,7 +262,7 @@ def requirements_pre_commit_output():
     for repo in (x for x in pre_commit_conf["repos"] if x.get("rev")):
         for hook in repo["hooks"]:
             if hook["id"] not in IGNORE_PRE_COMMIT_HOOK_ID:
-                reqs.append(f"{hook['id']}=={repo['rev']}")
+                reqs.append(f"{hook['id']}=={repo['rev'].lstrip('v')}")
                 reqs.extend(x for x in hook.get("additional_dependencies", ()))
     output = [
         f"# Automatically generated "

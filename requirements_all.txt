@@ -317,7 +317,7 @@ beautifulsoup4==4.8.2
 beewi_smartclim==0.0.7
 
 # homeassistant.components.zha
-bellows-homeassistant==0.15.1
+bellows-homeassistant==0.15.2
 
 # homeassistant.components.bmw_connected_drive
 bimmer_connected==0.7.1
@@ -603,7 +603,6 @@ georss_ign_sismologia_client==0.2
 # homeassistant.components.qld_bushfire
 georss_qld_bushfire_alert_client==0.3
 
-# homeassistant.components.braviatv
 # homeassistant.components.huawei_lte
 # homeassistant.components.kef
 # homeassistant.components.minecraft_server
@@ -965,6 +964,9 @@ onvif-zeep-async==0.2.0
 
 # homeassistant.components.opencv
 # opencv-python-headless==4.2.0.32
+
+# homeassistant.components.openerz
+openerz-api==0.1.0
 
 # homeassistant.components.openevse
 openevsewifi==0.4
@@ -1390,7 +1392,7 @@ pymailgunner==1.4
 pymediaroom==0.6.4
 
 # homeassistant.components.melcloud
-pymelcloud==2.4.0
+pymelcloud==2.4.1
 
 # homeassistant.components.somfy
 pymfy==0.7.1
@@ -2047,7 +2049,7 @@ transmissionrpc==0.11
 tuyaha==0.0.5
 
 # homeassistant.components.twentemilieu
-twentemilieu==0.2.0
+twentemilieu==0.3.0
 
 # homeassistant.components.twilio
 twilio==6.32.0
@@ -2191,7 +2193,7 @@ zigpy-cc==0.3.1
 zigpy-deconz==0.8.0
 
 # homeassistant.components.zha
-zigpy-homeassistant==0.18.0
+zigpy-homeassistant==0.18.1
 
 # homeassistant.components.zha
 zigpy-xbee-homeassistant==0.11.0

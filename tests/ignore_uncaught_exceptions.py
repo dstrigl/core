@@ -8,13 +8,6 @@ IGNORE_UNCAUGHT_EXCEPTIONS = [
     ("tests.components.default_config.test_init", "test_setup"),
     ("tests.components.demo.test_init", "test_setting_up_demo"),
     ("tests.components.discovery.test_init", "test_discover_config_flow"),
-    ("tests.components.dsmr.test_sensor", "test_default_setup"),
-    ("tests.components.dsmr.test_sensor", "test_v4_meter"),
-    ("tests.components.dsmr.test_sensor", "test_v5_meter"),
-    ("tests.components.dsmr.test_sensor", "test_belgian_meter"),
-    ("tests.components.dsmr.test_sensor", "test_belgian_meter_low"),
-    ("tests.components.dsmr.test_sensor", "test_tcp"),
-    ("tests.components.dsmr.test_sensor", "test_connection_errors_retry"),
     ("tests.components.dyson.test_air_quality", "test_purecool_aiq_attributes"),
     ("tests.components.dyson.test_air_quality", "test_purecool_aiq_update_state"),
     (
@@ -57,11 +50,6 @@ IGNORE_UNCAUGHT_EXCEPTIONS = [
         "test_configuring_devices_from_multiple_sources",
     ),
     ("tests.components.unifi_direct.test_device_tracker", "test_get_scanner"),
-    ("tests.components.upnp.test_init", "test_async_setup_entry_default"),
-    ("tests.components.upnp.test_init", "test_async_setup_entry_port_mapping"),
-    ("tests.components.yr.test_sensor", "test_default_setup"),
-    ("tests.components.yr.test_sensor", "test_custom_setup"),
-    ("tests.components.yr.test_sensor", "test_forecast_setup"),
     ("tests.components.zwave.test_init", "test_power_schemes"),
 ]
 
