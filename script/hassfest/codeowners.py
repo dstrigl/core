@@ -48,9 +48,7 @@ def generate_and_validate(integrations: Dict[str, Integration]):
                     "codeowners", "Code owners need to be valid GitHub handles."
                 )
 
-        parts.append(
-            "homeassistant/components/{}/* {}".format(domain, " ".join(codeowners))
-        )
+        parts.append(f"homeassistant/components/{domain}/* {' '.join(codeowners)}")
 
     parts.append(f"\n{INDIVIDUAL_FILES.strip()}")
 
@@ -62,7 +60,7 @@ def validate(integrations: Dict[str, Integration], config: Config):
     codeowners_path = config.root / "CODEOWNERS"
     config.cache["codeowners"] = content = generate_and_validate(integrations)
 
-    with open(str(codeowners_path), "r") as fp:
+    with open(str(codeowners_path)) as fp:
         if fp.read().strip() != content:
             config.add_error(
                 "codeowners",

@@ -68,7 +68,7 @@ enum34==1000000000.0.0
 pycrypto==1000000000.0.0
 """
 
-IGNORE_PRE_COMMIT_HOOK_ID = ("check-json", "no-commit-to-branch")
+IGNORE_PRE_COMMIT_HOOK_ID = ("check-json", "no-commit-to-branch", "prettier")
 
 
 def has_tests(module: str):
@@ -102,7 +102,7 @@ def explore_module(package, explore_children):
     if not hasattr(module, "__path__"):
         return found
 
-    for _, name, _ in pkgutil.iter_modules(module.__path__, package + "."):
+    for _, name, _ in pkgutil.iter_modules(module.__path__, f"{package}."):
         found.append(name)
 
         if explore_children:
@@ -169,10 +169,7 @@ def gather_requirements_from_manifests(errors, reqs):
             continue
 
         process_requirements(
-            errors,
-            integration.requirements,
-            f"homeassistant.components.{domain}",
-            reqs,
+            errors, integration.requirements, f"homeassistant.components.{domain}", reqs
         )
 
 
@@ -185,7 +182,7 @@ def gather_requirements_from_modules(errors, reqs):
         try:
             module = importlib.import_module(package)
         except ImportError as err:
-            print("{}.py: {}".format(package.replace(".", "/"), err))
+            print(f"{package.replace('.', '/')}.py: {err}")
             errors.append(package)
             continue
 
