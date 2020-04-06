@@ -1,6 +1,8 @@
 """Support for Modbus lights."""
 import logging
 
+from pymodbus.exceptions import ModbusException
+from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.light import (
@@ -16,7 +18,7 @@ from pymodbus.payload import BinaryPayloadBuilder
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
-from . import CONF_HUB, DEFAULT_HUB, DOMAIN as MODBUS_DOMAIN
+from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -37,19 +39,16 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     """Read configuration and create Modbus devices."""
-    hub_name = config.get(CONF_HUB)
+    hub_name = config[CONF_HUB]
     hub = hass.data[MODBUS_DOMAIN][hub_name]
-    name = config.get(CONF_NAME)
-    slave = config.get(CONF_SLAVE)
-    state_coil = config.get(CONF_STATE_COIL)
+    name = config[CONF_NAME]
+    slave = config[CONF_SLAVE]
+    state_coil = config[CONF_STATE_COIL]
     brightness_register = config.get(CONF_BRIGHTNESS_REGISTER)
 
-    add_entities([ModbusLight(
-        hub, name, slave, state_coil, brightness_register
-        )]
-    )
+    add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
 
 
 class ModbusLight(Light, RestoreEntity):
@@ -66,6 +65,7 @@ class ModbusLight(Light, RestoreEntity):
             self._brightness_register = int(self._brightness_register)
         self._is_on = None
         self._brightness = None
+        self._available = True
 
     async def async_added_to_hass(self):
         """Handle entity about to be added to hass event."""
@@ -84,14 +84,9 @@ class ModbusLight(Light, RestoreEntity):
         return self._name
 
     @property
-    def is_on(self):
-        """Return true if the light is on."""
-        return self._is_on
-
-    @property
-    def brightness(self):
-        """Return the brightness of this light between 0..255."""
-        return self._brightness
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self._available
 
     @property
     def supported_features(self):
@@ -101,7 +96,22 @@ class ModbusLight(Light, RestoreEntity):
             supported_features |= SUPPORT_BRIGHTNESS
         return supported_features
 
-    def turn_on(self, **kwargs):
+    @property
+    def is_on(self):
+        """Return true if the light is on."""
+        return self._is_on
+
+    @property
+    def brightness(self):
+        """Return the brightness of this light between 0..255."""
+        return self._brightness
+
+    async def _write_coil(self, coil, value):
+        """Write coil using the Modbus hub slave."""
+        await self._hub.write_coil(self._slave, coil, value)
+        self._available = True
+
+    async def async_turn_on(self, **kwargs):
         """Turn on the light."""
         if self.supported_features & SUPPORT_BRIGHTNESS \
                 and ATTR_BRIGHTNESS in kwargs:
@@ -109,44 +119,29 @@ class ModbusLight(Light, RestoreEntity):
             brightness = max(0, min(255, brightness))
             builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
             builder.add_16bit_uint(brightness)
-            self._hub.write_registers(
+            await self._hub.write_registers(
                 self._slave, self._brightness_register, builder.to_registers()
             )
-        self._hub.write_coil(self._slave, self._state_coil, True)
+        await self._write_coil(self._state_coil, True)
 
-    def turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs):
         """Turn off the light."""
-        self._hub.write_coil(self._slave, self._state_coil, False)
+        await self._write_coil(self._state_coil, False)
 
-    def update(self):
+    async def async_update(self):
         """Update the state of the light."""
         if self.supported_features & SUPPORT_BRIGHTNESS:
-            result = self._hub.read_holding_registers(
+            result = await self._hub.read_holding_registers(
                 self._slave, self._brightness_register, 1
             )
-            try:
-                dec = BinaryPayloadDecoder.fromRegisters(
-                    result.registers, byteorder=BYTEORDER
-                )
-                self._brightness = dec.decode_16bit_uint()
-            except AttributeError:
-                _LOGGER.error(
-                    "No response from hub %s, slave %s, register %s"
-                    " (brightness)",
-                    self._hub.name,
-                    self._slave,
-                    self._brightness_register,
-                )
-        result = self._hub.read_coils(
-            self._slave, self._state_coil, 1
-        )
-        try:
-            self._is_on = bool(result.bits[0])
-        except AttributeError:
-            _LOGGER.error(
-                "No response from hub %s, slave %s, coil %s"
-                " (state)",
-                self._hub.name,
-                self._slave,
-                self._state_coil,
-            )
+            if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
+                self._available = False
+                return
+            dec = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=BYTEORDER)
+            self._brightness = dec.decode_16bit_uint()
+        result = await self._hub.read_coils(self._slave, self._state_coil, 1)
+        if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
+            self._available = False
+            return
+        self._is_on = bool(result.bits[0])
+        self._available = True
