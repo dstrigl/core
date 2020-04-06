@@ -11,9 +11,8 @@ from homeassistant.components.light import (
     SUPPORT_BRIGHTNESS,
     Light,
 )
-from homeassistant.const import CONF_NAME, CONF_SLAVE, STATE_ON
+from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers.restore_state import RestoreEntity
 from pymodbus.payload import BinaryPayloadBuilder
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
@@ -51,7 +50,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
 
 
-class ModbusLight(Light, RestoreEntity):
+class ModbusLight(Light):
     """Representation of a Modbus light."""
 
     def __init__(self, hub, name, slave, state_coil, brightness_register):
@@ -66,17 +65,6 @@ class ModbusLight(Light, RestoreEntity):
         self._is_on = None
         self._brightness = None
         self._available = True
-
-    async def async_added_to_hass(self):
-        """Handle entity about to be added to hass event."""
-        await super().async_added_to_hass()
-        last_state = await self.async_get_last_state()
-        if last_state:
-            self._is_on = last_state.state == STATE_ON
-            if self.supported_features & SUPPORT_BRIGHTNESS:
-                self._brightness = last_state.attributes.get(
-                    "brightness", DEFAULT_BRIGHTNESS
-                )
 
     @property
     def name(self):
