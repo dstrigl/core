@@ -1,0 +1,7 @@
+{
+  "domain": "htrest",
+  "name": "HtREST",
+  "documentation": "",
+  "requirements": [],
+  "codeowners": ["@dstrigl"]
+}
