@@ -52,7 +52,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-async def async_setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Read configuration and create Modbus devices."""
     hub_name = config[CONF_HUB]
     hub = hass.data[MODBUS_DOMAIN][hub_name]
@@ -61,7 +61,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     current_status_addr = config[CONF_CURRENT_STATUS_ADDR]
     request_status_addr = config[CONF_REQUEST_STATUS_ADDR]
 
-    add_entities(
+    async_add_entities(
         [ModbusCover(hub, name, slave, current_status_addr, request_status_addr)]
     )
 

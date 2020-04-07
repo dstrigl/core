@@ -38,7 +38,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-async def async_setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Read configuration and create Modbus devices."""
     hub_name = config[CONF_HUB]
     hub = hass.data[MODBUS_DOMAIN][hub_name]
@@ -47,7 +47,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     state_coil = config[CONF_STATE_COIL]
     brightness_register = config.get(CONF_BRIGHTNESS_REGISTER)
 
-    add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
+    async_add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
 
 
 class ModbusLight(Light):
