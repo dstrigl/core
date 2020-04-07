@@ -199,9 +199,7 @@ class ModbusCover(CoverDevice):
 
     async def async_update(self):
         """Update the state of the cover."""
-        result = await self._hub.read_holding_registers(
-            self._slave, self._current_status_addr, 3
-            )
+        result = await self._hub.read_holding_registers(self._slave, self._current_status_addr, 3)
         if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
             self._available = False
             return
