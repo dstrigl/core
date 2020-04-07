@@ -246,7 +246,7 @@ class HtRestThermostat(ClimateDevice):
         try:
             websession = async_get_clientsession(self.hass, self._verify_ssl)
             with async_timeout.timeout(self._timeout):
-                req = await getattr(websession, "put")(
+                req = await websession.put(
                     self._resource,  # TODO --> "/api/v1/param/HKR%20Soll_Raum"
                     auth=self._auth,
                     data=bytes(json.dumps({"value": temperature}), "utf-8"),
@@ -278,8 +278,9 @@ class HtRestThermostat(ClimateDevice):
         try:
             websession = async_get_clientsession(self.hass, self._verify_ssl)
             with async_timeout.timeout(self._timeout):
-                req = await getattr(websession, "put")(
-                    self._resource,  # TODO --> "/api/v1/param/HKR%20Soll_Raum"
+                req = await websession.get(
+                    # TODO --> "/api/v1/param/HKR%20Soll_Raum"
+                    self._resource,
                     auth=self._auth,
                     headers={"accept": "application/json"},
                 )
