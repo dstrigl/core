@@ -61,7 +61,9 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     current_status_addr = config[CONF_CURRENT_STATUS_ADDR]
     request_status_addr = config[CONF_REQUEST_STATUS_ADDR]
 
-    add_entities([ModbusCover(hub, name, slave, current_status_addr, request_status_addr)])
+    add_entities(
+        [ModbusCover(hub, name, slave, current_status_addr, request_status_addr)]
+    )
 
 
 def scale_to_255(value):
@@ -108,9 +110,11 @@ class ModbusCover(CoverDevice):
     def supported_features(self):
         """Flag supported features."""
         supported_features = (
-            SUPPORT_OPEN | SUPPORT_CLOSE |
-            SUPPORT_SET_POSITION | SUPPORT_SET_TILT_POSITION |
-            SUPPORT_STOP
+            SUPPORT_OPEN
+            | SUPPORT_CLOSE
+            | SUPPORT_SET_POSITION
+            | SUPPORT_SET_TILT_POSITION
+            | SUPPORT_STOP
         )
         return supported_features
 
@@ -199,7 +203,9 @@ class ModbusCover(CoverDevice):
 
     async def async_update(self):
         """Update the state of the cover."""
-        result = await self._hub.read_holding_registers(self._slave, self._current_status_addr, 3)
+        result = await self._hub.read_holding_registers(
+            self._slave, self._current_status_addr, 3
+        )
         if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
             self._available = False
             return

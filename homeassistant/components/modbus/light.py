@@ -101,8 +101,7 @@ class ModbusLight(Light):
 
     async def async_turn_on(self, **kwargs):
         """Turn on the light."""
-        if self.supported_features & SUPPORT_BRIGHTNESS \
-                and ATTR_BRIGHTNESS in kwargs:
+        if self.supported_features & SUPPORT_BRIGHTNESS and ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS])
             brightness = max(0, min(255, brightness))
             builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
@@ -122,10 +121,14 @@ class ModbusLight(Light):
             result = await self._hub.read_holding_registers(
                 self._slave, self._brightness_register, 1
             )
-            if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
+            if result is None or isinstance(
+                result, (ModbusException, ExceptionResponse)
+            ):
                 self._available = False
                 return
-            dec = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=BYTEORDER)
+            dec = BinaryPayloadDecoder.fromRegisters(
+                result.registers, byteorder=BYTEORDER
+            )
             self._brightness = dec.decode_16bit_uint()
         result = await self._hub.read_coils(self._slave, self._state_coil, 1)
         if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
