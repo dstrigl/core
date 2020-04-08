@@ -12,9 +12,9 @@ from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateDevice
 from homeassistant.components.climate.const import (
     HVAC_MODE_AUTO,
     SUPPORT_TARGET_TEMPERATURE,
-    CURRENT_HVAC_HEAT,
-    CURRENT_HVAC_IDLE,
     CURRENT_HVAC_OFF,
+    CURRENT_HVAC_IDLE,
+    CURRENT_HVAC_HEAT,
 )
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_START,
@@ -28,9 +28,7 @@ from homeassistant.const import (
     CONF_TIMEOUT,
     CONF_VERIFY_SSL,
     TEMP_CELSIUS,
-    PRECISION_HALVES,
     PRECISION_TENTHS,
-    PRECISION_WHOLE,
 )
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -42,14 +40,12 @@ _LOGGER = logging.getLogger(__name__)
 CONF_SENSOR = "target_sensor"
 CONF_MIN_TEMP = "min_temp"
 CONF_MAX_TEMP = "max_temp"
-CONF_PRECISION = "precision"
 CONF_STEP = "temp_step"
 
 DEFAULT_TIMEOUT = 10
 DEFAULT_VERIFY_SSL = True
 DEFAULT_MIN_TEMP = 10
 DEFAULT_MAX_TEMP = 25
-DEFAULT_PRECISION = 1  # TODO
 DEFAULT_STEP = 0.5
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
@@ -63,10 +59,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
         vol.Optional(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): cv.positive_int,
         vol.Optional(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): cv.positive_int,
-        # vol.Optional(CONF_PRECISION, default=DEFAULT_PRECISION): cv.positive_int,  # TODO
-        vol.Optional(CONF_PRECISION, default=DEFAULT_PRECISION): vol.In(
-            [PRECISION_TENTHS, PRECISION_HALVES, PRECISION_WHOLE]
-        ),
         vol.Optional(CONF_STEP, default=DEFAULT_STEP): vol.Coerce(float),
     }
 )
@@ -83,7 +75,6 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     verify_ssl = config[CONF_VERIFY_SSL]
     min_temp = config[CONF_MIN_TEMP]
     max_temp = config[CONF_MAX_TEMP]
-    precision = config[CONF_PRECISION]
     temp_step = config[CONF_STEP]
 
     auth = None
@@ -101,7 +92,6 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
                 verify_ssl,
                 min_temp,
                 max_temp,
-                precision,
                 temp_step,
             )
         ],
@@ -122,7 +112,6 @@ class HtRestThermostat(ClimateDevice):
         verify_ssl,
         min_temp,
         max_temp,
-        precision,
         temp_step,
     ):
         """Initialize the unit."""
@@ -134,7 +123,6 @@ class HtRestThermostat(ClimateDevice):
         self._verify_ssl = verify_ssl
         self._min_temp = min_temp
         self._max_temp = max_temp
-        self._precision = precision
         self._temp_step = temp_step
         self._target_temp = None
         self._current_temp = None
@@ -169,7 +157,7 @@ class HtRestThermostat(ClimateDevice):
             return
 
         self._async_update_temp(new_state)
-        self.async_write_ha_state()  # TODO?
+        self.async_write_ha_state()
 
     @callback
     def _async_update_temp(self, state) -> None:
@@ -197,9 +185,7 @@ class HtRestThermostat(ClimateDevice):
     @property
     def hvac_mode(self) -> str:
         """Return the current HVAC mode."""
-        # return CURRENT_HVAC_OFF
-        # return HVAC_MODE_AUTO
-        return CURRENT_HVAC_IDLE
+        return HVAC_MODE_AUTO
 
     @property
     def hvac_modes(self) -> List[str]:
@@ -208,12 +194,14 @@ class HtRestThermostat(ClimateDevice):
 
     async def async_set_hvac_mode(self, hvac_mode: str) -> None:
         """Set new target hvac mode."""
-        pass
+        assert hvac_mode == HVAC_MODE_AUTO
 
     @property
     def hvac_action(self) -> Optional[str]:
         """Return the current running hvac operation."""
-        return CURRENT_HVAC_HEAT
+        # return CURRENT_HVAC_OFF
+        return CURRENT_HVAC_IDLE  # TODO
+        # return CURRENT_HVAC_HEAT
 
     @property
     def current_temperature(self) -> Optional[float]:
@@ -243,7 +231,7 @@ class HtRestThermostat(ClimateDevice):
     @property
     def precision(self) -> float:
         """Return the precision of the device."""
-        return self._precision
+        return PRECISION_TENTHS
 
     @property
     def target_temperature_step(self) -> Optional[float]:
