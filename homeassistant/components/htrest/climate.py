@@ -244,7 +244,6 @@ class HtRestThermostat(ClimateDevice):
         if temperature is None:
             return
         assert isinstance(temperature, float)
-        self._target_temp = temperature
         try:
             websession = async_get_clientsession(self.hass, self._verify_ssl)
             with async_timeout.timeout(self._timeout):
@@ -261,6 +260,7 @@ class HtRestThermostat(ClimateDevice):
                 text = await req.text()
                 self._target_temp = float(json.loads(text)["value"])
                 self._available = True
+                self.async_write_ha_state()
             else:
                 _LOGGER.error(
                     "Can't set target temperature %s. Is resource/endpoint offline?",
