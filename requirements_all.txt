@@ -673,7 +673,7 @@ habitipy==0.2.0
 hangups==0.4.9
 
 # homeassistant.components.cloud
-hass-nabucasa==0.33.0
+hass-nabucasa==0.34.0
 
 # homeassistant.components.mqtt
 hbmqtt==0.9.5
@@ -703,7 +703,7 @@ hole==0.5.1
 holidays==0.10.1
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200406.0
+home-assistant-frontend==20200407.1
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -1499,7 +1499,7 @@ pypoint==1.1.2
 pyps4-2ndscreen==1.0.7
 
 # homeassistant.components.qvr_pro
-pyqvrpro==0.51
+pyqvrpro==0.52
 
 # homeassistant.components.qwikswitch
 pyqwikswitch==0.93
