@@ -12,6 +12,7 @@ from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateDevice
 from homeassistant.components.climate.const import (
     HVAC_MODE_AUTO,
     SUPPORT_TARGET_TEMPERATURE,
+    CURRENT_HVAC_HEAT,
 )
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_START,
@@ -200,6 +201,17 @@ class HtRestThermostat(ClimateDevice):
     def hvac_modes(self) -> List[str]:
         """Return the possible HVAC modes."""
         return [HVAC_MODE_AUTO]
+
+    async def async_set_hvac_mode(self, hvac_mode: str) -> None:
+        """Set new target hvac mode."""
+        _LOGGER.error("### async_set_hvac_mode(%s)", hvac_mode)
+        pass
+
+    @property
+    def hvac_action(self) -> Optional[str]:
+        """Return the current running hvac operation."""
+        _LOGGER.error("### hvac_action")
+        return CURRENT_HVAC_HEAT
 
     @property
     def current_temperature(self) -> Optional[float]:
