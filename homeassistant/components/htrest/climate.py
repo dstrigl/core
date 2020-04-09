@@ -297,7 +297,7 @@ class HtRestThermostat(ClimateDevice):
                     self._resource,
                     auth=self._auth,
                     headers={"accept": "application/json"},
-                    params={param: None for param in params},
+                    params={param: "" for param in params},
                 )
                 text = await req.text()
             values = json.loads(text)
