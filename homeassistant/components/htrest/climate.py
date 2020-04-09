@@ -300,6 +300,7 @@ class HtRestThermostat(ClimateDevice):
                     params={param: "" for param in params},
                 )
                 text = await req.text()
+                _LOGGER.error("async_update: %s", text)
             values = json.loads(text)
             self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
             if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
