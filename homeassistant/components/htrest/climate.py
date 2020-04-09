@@ -50,6 +50,7 @@ DEFAULT_STEP = 0.5
 
 URL_PARAM = "api/v1/param/"
 PARAM_HKR_SOLL_RAUM = "HKR%20Soll_Raum"
+PARAM_STOERUNG = "Stoerung"
 PARAM_HAUPTSCHALTER = "Hauptschalter"
 PARAM_HEIZKREISPUMPE = "Heizkreispumpe"
 PARAM_WARMWASSERVORRANG = "Warmwasservorrang"
@@ -282,8 +283,9 @@ class HtRestThermostat(ClimateDevice):
 
     async def async_update(self) -> None:
         """Update target temperature."""
-        resource = self._resource + "?{}&{}&{}&{}".format(
+        resource = self._resource + "?{}&{}&{}&{}&{}".format(
             PARAM_HKR_SOLL_RAUM,
+            PARAM_STOERUNG,
             PARAM_HAUPTSCHALTER,
             PARAM_HEIZKREISPUMPE,
             PARAM_WARMWASSERVORRANG,
@@ -297,7 +299,7 @@ class HtRestThermostat(ClimateDevice):
                 text = await req.text()
             values = json.loads(text)
             self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
-            if not values[PARAM_HAUPTSCHALTER]:
+            if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
                 self._current_hvac_action = CURRENT_HVAC_OFF
             elif values[PARAM_HEIZKREISPUMPE] and not values[PARAM_WARMWASSERVORRANG]:
                 self._current_hvac_action = CURRENT_HVAC_HEAT
