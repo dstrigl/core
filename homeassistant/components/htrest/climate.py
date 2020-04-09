@@ -300,16 +300,21 @@ class HtRestThermostat(ClimateDevice):
                     params={param: "" for param in params},
                 )
                 text = await req.text()
-                _LOGGER.error("async_update: %s", text)
-            values = json.loads(text)
-            self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
-            if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
-                self._current_hvac_action = CURRENT_HVAC_OFF
-            elif values[PARAM_HEIZKREISPUMPE] and not values[PARAM_WARMWASSERVORRANG]:
-                self._current_hvac_action = CURRENT_HVAC_HEAT
-            else:
-                self._current_hvac_action = CURRENT_HVAC_IDLE
-            self._available = True
+            try:
+                values = json.loads(text)
+                self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
+                if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
+                    self._current_hvac_action = CURRENT_HVAC_OFF
+                elif (
+                    values[PARAM_HEIZKREISPUMPE] and not values[PARAM_WARMWASSERVORRANG]
+                ):
+                    self._current_hvac_action = CURRENT_HVAC_HEAT
+                else:
+                    self._current_hvac_action = CURRENT_HVAC_IDLE
+                self._available = True
+            except Exception:
+                _LOGGER.exception("Invalid response from %s: %s", self._resource, text)
+                self._available = False
         except asyncio.TimeoutError:
             _LOGGER.exception("Timed out while fetching data from %s", self._resource)
             self._available = False
