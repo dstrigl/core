@@ -2,6 +2,7 @@
 import asyncio
 import logging
 
+from async_timeout import timeout
 from pymodbus.client.asynchronous import schedulers
 from pymodbus.client.asynchronous.serial import AsyncModbusSerialClient as ClientSerial
 from pymodbus.client.asynchronous.tcp import AsyncModbusTCPClient as ClientTCP
@@ -20,7 +21,6 @@ from homeassistant.const import (
     CONF_PORT,
     CONF_TIMEOUT,
     CONF_TYPE,
-    EVENT_HOMEASSISTANT_START,
     EVENT_HOMEASSISTANT_STOP,
 )
 import homeassistant.helpers.config_validation as cv
@@ -105,26 +105,12 @@ async def async_setup(hass, config):
         for client in hub_collect.values():
             del client
 
-    def start_modbus(event):
+    def start_modbus():
         """Start Modbus service."""
         for client in hub_collect.values():
             client.setup()
 
         hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, stop_modbus)
-
-        # Register services for modbus
-        hass.services.async_register(
-            MODBUS_DOMAIN,
-            SERVICE_WRITE_REGISTER,
-            write_register,
-            schema=SERVICE_WRITE_REGISTER_SCHEMA,
-        )
-        hass.services.async_register(
-            MODBUS_DOMAIN,
-            SERVICE_WRITE_COIL,
-            write_coil,
-            schema=SERVICE_WRITE_COIL_SCHEMA,
-        )
 
     async def write_register(service):
         """Write Modbus registers."""
@@ -149,8 +135,19 @@ async def async_setup(hass, config):
         client_name = service.data[ATTR_HUB]
         await hub_collect[client_name].write_coil(unit, address, state)
 
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, start_modbus)
+    # do not wait for EVENT_HOMEASSISTANT_START, activate pymodbus now
+    await hass.async_add_executor_job(start_modbus)
 
+    # Register services for modbus
+    hass.services.async_register(
+        MODBUS_DOMAIN,
+        SERVICE_WRITE_REGISTER,
+        write_register,
+        schema=SERVICE_WRITE_REGISTER_SCHEMA,
+    )
+    hass.services.async_register(
+        MODBUS_DOMAIN, SERVICE_WRITE_COIL, write_coil, schema=SERVICE_WRITE_COIL_SCHEMA,
+    )
     return True
 
 
@@ -168,7 +165,7 @@ class ModbusHub:
         self._config_type = client_config[CONF_TYPE]
         self._config_port = client_config[CONF_PORT]
         self._config_timeout = client_config[CONF_TIMEOUT]
-        self._config_delay = client_config[CONF_DELAY]
+        self._config_delay = 0
 
         if self._config_type == "serial":
             # serial configuration
@@ -180,6 +177,7 @@ class ModbusHub:
         else:
             # network configuration
             self._config_host = client_config[CONF_HOST]
+            self._config_delay = client_config[CONF_DELAY]
 
     @property
     def name(self):
@@ -242,7 +240,12 @@ class ModbusHub:
         await self._connect_delay()
         async with self._lock:
             kwargs = {"unit": unit} if unit else {}
-            result = await func(address, count, **kwargs)
+            try:
+                async with timeout(self._config_timeout):
+                    result = await func(address, count, **kwargs)
+            except asyncio.TimeoutError:
+                result = None
+
             if isinstance(result, (ModbusException, ExceptionResponse)):
                 _LOGGER.error("Hub %s Exception (%s)", self._config_name, result)
             return result
@@ -252,7 +255,11 @@ class ModbusHub:
         await self._connect_delay()
         async with self._lock:
             kwargs = {"unit": unit} if unit else {}
-            await func(address, value, **kwargs)
+            try:
+                async with timeout(self._config_timeout):
+                    func(address, value, **kwargs)
+            except asyncio.TimeoutError:
+                return
 
     async def read_coils(self, unit, address, count):
         """Read coils."""
