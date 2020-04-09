@@ -49,7 +49,7 @@ DEFAULT_MAX_TEMP = 25
 DEFAULT_STEP = 0.5
 
 URL_PARAM = "api/v1/param/"
-PARAM_HKR_SOLL_RAUM = "HKR%20Soll_Raum"
+PARAM_HKR_SOLL_RAUM = "HKR Soll_Raum"
 PARAM_STOERUNG = "Stoerung"
 PARAM_HAUPTSCHALTER = "Hauptschalter"
 PARAM_HEIZKREISPUMPE = "Heizkreispumpe"
@@ -283,18 +283,20 @@ class HtRestThermostat(ClimateDevice):
 
     async def async_update(self) -> None:
         """Update target temperature."""
-        resource = self._resource + "?{}&{}&{}&{}&{}".format(
-            PARAM_HKR_SOLL_RAUM,
-            PARAM_STOERUNG,
-            PARAM_HAUPTSCHALTER,
-            PARAM_HEIZKREISPUMPE,
-            PARAM_WARMWASSERVORRANG,
-        )
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
                 req = await websession.get(
-                    resource, auth=self._auth, headers={"accept": "application/json"},
+                    self._resource,
+                    auth=self._auth,
+                    headers={"accept": "application/json"},
+                    params=(
+                        PARAM_HKR_SOLL_RAUM,
+                        PARAM_STOERUNG,
+                        PARAM_HAUPTSCHALTER,
+                        PARAM_HEIZKREISPUMPE,
+                        PARAM_WARMWASSERVORRANG,
+                    ),
                 )
                 text = await req.text()
             values = json.loads(text)
@@ -307,8 +309,10 @@ class HtRestThermostat(ClimateDevice):
                 self._current_hvac_action = CURRENT_HVAC_IDLE
             self._available = True
         except asyncio.TimeoutError:
-            _LOGGER.exception("Timed out while fetching data from %s", resource)
+            _LOGGER.exception("Timed out while fetching data from %s", self._resource)
             self._available = False
         except aiohttp.ClientError as err:
-            _LOGGER.exception("Error while fetching data from %s: %s", resource, err)
+            _LOGGER.exception(
+                "Error while fetching data from %s: %s", self._resource, err
+            )
             self._available = False
