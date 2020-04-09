@@ -286,17 +286,18 @@ class HtRestThermostat(ClimateDevice):
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
+                params = (
+                    PARAM_HKR_SOLL_RAUM,
+                    PARAM_STOERUNG,
+                    PARAM_HAUPTSCHALTER,
+                    PARAM_HEIZKREISPUMPE,
+                    PARAM_WARMWASSERVORRANG,
+                )
                 req = await websession.get(
                     self._resource,
                     auth=self._auth,
                     headers={"accept": "application/json"},
-                    params=(
-                        PARAM_HKR_SOLL_RAUM,
-                        PARAM_STOERUNG,
-                        PARAM_HAUPTSCHALTER,
-                        PARAM_HEIZKREISPUMPE,
-                        PARAM_WARMWASSERVORRANG,
-                    ),
+                    params={k: None for (k, v) in params},
                 )
                 text = await req.text()
             values = json.loads(text)
