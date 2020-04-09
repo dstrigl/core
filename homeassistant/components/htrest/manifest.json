@@ -3,5 +3,6 @@
   "name": "HtREST",
   "documentation": "",
   "requirements": [],
+  "dependencies": ["sensor"],
   "codeowners": ["@dstrigl"]
 }
