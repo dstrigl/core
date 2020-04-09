@@ -22,11 +22,11 @@ from homeassistant.const import (
     STATE_UNKNOWN,
     ATTR_TEMPERATURE,
     CONF_NAME,
-    CONF_RESOURCE,
+    CONF_HOST,
+    CONF_PORT,
     CONF_USERNAME,
     CONF_PASSWORD,
     CONF_TIMEOUT,
-    CONF_VERIFY_SSL,
     TEMP_CELSIUS,
     PRECISION_TENTHS,
 )
@@ -42,21 +42,27 @@ CONF_MIN_TEMP = "min_temp"
 CONF_MAX_TEMP = "max_temp"
 CONF_STEP = "temp_step"
 
+DEFAULT_PORT = 8777
 DEFAULT_TIMEOUT = 10
-DEFAULT_VERIFY_SSL = True
 DEFAULT_MIN_TEMP = 10
 DEFAULT_MAX_TEMP = 25
 DEFAULT_STEP = 0.5
+
+URL_PARAM = "api/v1/param/"
+PARAM_HKR_SOLL_RAUM = "HKR%20Soll_Raum"
+PARAM_HAUPTSCHALTER = "Hauptschalter"
+PARAM_HEIZKREISPUMPE = "Heizkreispumpe"
+PARAM_WARMWASSERVORRANG = "Warmwasservorrang"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_NAME): cv.string,
         vol.Optional(CONF_SENSOR): cv.entity_id,
-        vol.Required(CONF_RESOURCE): cv.url,
+        vol.Required(CONF_HOST): cv.string,
+        vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
         vol.Inclusive(CONF_USERNAME, "authentication"): cv.string,
         vol.Inclusive(CONF_PASSWORD, "authentication"): cv.string,
         vol.Optional(CONF_TIMEOUT, default=DEFAULT_TIMEOUT): cv.positive_int,
-        vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
         vol.Optional(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): cv.positive_int,
         vol.Optional(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): cv.positive_int,
         vol.Optional(CONF_STEP, default=DEFAULT_STEP): vol.Coerce(float),
@@ -68,11 +74,11 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Heliotherm heat pump thermostat device."""
     name = config[CONF_NAME]
     sensor_entity_id = config.get(CONF_SENSOR)
-    resource = config[CONF_RESOURCE]
+    host = config[CONF_HOST]
+    port = config[CONF_PORT]
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
     timeout = config[CONF_TIMEOUT]
-    verify_ssl = config[CONF_VERIFY_SSL]
     min_temp = config[CONF_MIN_TEMP]
     max_temp = config[CONF_MAX_TEMP]
     temp_step = config[CONF_STEP]
@@ -86,10 +92,10 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
             HtRestThermostat(
                 name,
                 sensor_entity_id,
-                resource,
+                host,
+                port,
                 auth,
                 timeout,
-                verify_ssl,
                 min_temp,
                 max_temp,
                 temp_step,
@@ -106,10 +112,10 @@ class HtRestThermostat(ClimateDevice):
         self,
         name,
         sensor_entity_id,
-        resource,
+        host,
+        port,
         auth,
         timeout,
-        verify_ssl,
         min_temp,
         max_temp,
         temp_step,
@@ -117,15 +123,15 @@ class HtRestThermostat(ClimateDevice):
         """Initialize the unit."""
         self._name = name
         self._sensor_entity_id = sensor_entity_id
-        self._resource = resource
+        self._resource = "http://{}:{}/{}".format(host, port, URL_PARAM)
         self._auth = auth
         self._timeout = timeout
-        self._verify_ssl = verify_ssl
         self._min_temp = min_temp
         self._max_temp = max_temp
         self._temp_step = temp_step
         self._target_temp = None
         self._current_temp = None
+        self._current_hvac_action = None
         self._available = True
 
     async def async_added_to_hass(self) -> None:
@@ -199,9 +205,7 @@ class HtRestThermostat(ClimateDevice):
     @property
     def hvac_action(self) -> Optional[str]:
         """Return the current running hvac operation."""
-        # return CURRENT_HVAC_OFF
-        return CURRENT_HVAC_IDLE  # TODO
-        # return CURRENT_HVAC_HEAT
+        return self._current_hvac_action
 
     @property
     def current_temperature(self) -> Optional[float]:
@@ -244,11 +248,12 @@ class HtRestThermostat(ClimateDevice):
         if temperature is None:
             return
         assert isinstance(temperature, float)
+        resource = self._resource + PARAM_HKR_SOLL_RAUM
         try:
-            websession = async_get_clientsession(self.hass, self._verify_ssl)
+            websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
                 req = await websession.put(
-                    self._resource,  # TODO --> "/api/v1/param/HKR%20Soll_Raum"
+                    resource,
                     auth=self._auth,
                     data=bytes(json.dumps({"value": temperature}), "utf-8"),
                     headers={
@@ -263,39 +268,45 @@ class HtRestThermostat(ClimateDevice):
                 self.async_write_ha_state()
             else:
                 _LOGGER.error(
-                    "Can't set target temperature %s. Is resource/endpoint offline?",
-                    self._resource,
+                    "Can't set target temperature (%s). Is resource/endpoint offline?",
+                    resource,
                 )
         except asyncio.TimeoutError:
             _LOGGER.exception(
-                "Timed out while setting target temperature %s", self._resource
+                "Timed out while setting target temperature (%s)", resource
             )
         except aiohttp.ClientError as err:
             _LOGGER.exception(
-                "Error while setting target temperature %s: %s", self._resource, err
+                "Error while setting target temperature (%s): %s", resource, err
             )
 
     async def async_update(self) -> None:
         """Update target temperature."""
+        resource = self._resource + "?{}&{}&{}&{}".format(
+            PARAM_HKR_SOLL_RAUM,
+            PARAM_HAUPTSCHALTER,
+            PARAM_HEIZKREISPUMPE,
+            PARAM_WARMWASSERVORRANG,
+        )
         try:
-            websession = async_get_clientsession(self.hass, self._verify_ssl)
+            websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
                 req = await websession.get(
-                    # TODO --> "/api/v1/param/HKR%20Soll_Raum"
-                    self._resource,
-                    auth=self._auth,
-                    headers={"accept": "application/json"},
+                    resource, auth=self._auth, headers={"accept": "application/json"},
                 )
                 text = await req.text()
-            self._target_temp = float(json.loads(text)["value"])
+            values = json.loads(text)
+            self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
+            if not values[PARAM_HAUPTSCHALTER]:
+                self._current_hvac_action = CURRENT_HVAC_OFF
+            elif values[PARAM_HEIZKREISPUMPE] and not values[PARAM_WARMWASSERVORRANG]:
+                self._current_hvac_action = CURRENT_HVAC_HEAT
+            else:
+                self._current_hvac_action = CURRENT_HVAC_IDLE
             self._available = True
         except asyncio.TimeoutError:
-            _LOGGER.exception(
-                "Timed out while fetching target temperature %s", self._resource
-            )
+            _LOGGER.exception("Timed out while fetching data from %s", resource)
             self._available = False
         except aiohttp.ClientError as err:
-            _LOGGER.exception(
-                "Error while fetching target temperature %s: %s", self._resource, err
-            )
+            _LOGGER.exception("Error while fetching data from %s: %s", resource, err)
             self._available = False
