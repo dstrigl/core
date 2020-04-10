@@ -52,8 +52,8 @@ URL_PARAM = "api/v1/param/"
 PARAM_HKR_SOLL_RAUM = "HKR Soll_Raum"
 PARAM_STOERUNG = "Stoerung"
 PARAM_HAUPTSCHALTER = "Hauptschalter"
-PARAM_HEIZKREISPUMPE = "Heizkreispumpe"
-PARAM_WARMWASSERVORRANG = "Warmwasservorrang"
+PARAM_VERDICHTERANFORDERUNG = "Verdichteranforderung"
+PARAM_VERDICHTER_STATUS = "Verdichter_Status"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -290,8 +290,8 @@ class HtRestThermostat(ClimateDevice):
                     PARAM_HKR_SOLL_RAUM,
                     PARAM_STOERUNG,
                     PARAM_HAUPTSCHALTER,
-                    PARAM_HEIZKREISPUMPE,
-                    PARAM_WARMWASSERVORRANG,
+                    PARAM_VERDICHTER_STATUS,
+                    PARAM_VERDICHTERANFORDERUNG,
                 )
                 req = await websession.get(
                     self._resource,
@@ -305,8 +305,12 @@ class HtRestThermostat(ClimateDevice):
                 self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
                 if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
                     self._current_hvac_action = CURRENT_HVAC_OFF
+                # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
+                # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
+                # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
                 elif (
-                    values[PARAM_HEIZKREISPUMPE] and not values[PARAM_WARMWASSERVORRANG]
+                    values[PARAM_VERDICHTER_STATUS] == 9
+                    and values[PARAM_VERDICHTERANFORDERUNG] == 2
                 ):
                     self._current_hvac_action = CURRENT_HVAC_HEAT
                 else:
