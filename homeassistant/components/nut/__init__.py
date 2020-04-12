@@ -13,6 +13,7 @@ from homeassistant.const import (
     CONF_PASSWORD,
     CONF_PORT,
     CONF_RESOURCES,
+    CONF_SCAN_INTERVAL,
     CONF_USERNAME,
 )
 from homeassistant.core import HomeAssistant
@@ -21,6 +22,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import (
     COORDINATOR,
+    DEFAULT_SCAN_INTERVAL,
     DOMAIN,
     PLATFORMS,
     PYNUT_DATA,
@@ -29,6 +31,7 @@ from .const import (
     PYNUT_MODEL,
     PYNUT_NAME,
     PYNUT_UNIQUE_ID,
+    UNDO_UPDATE_LISTENER,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -51,6 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     alias = config.get(CONF_ALIAS)
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
+    scan_interval = entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
 
     data = PyNUTData(host, port, alias, username, password)
 
@@ -64,7 +68,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER,
         name="NUT resource status",
         update_method=async_update_data,
-        update_interval=timedelta(seconds=60),
+        update_interval=timedelta(seconds=scan_interval),
     )
 
     # Fetch initial data so we have data when entities subscribe
@@ -77,6 +81,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     _LOGGER.debug("NUT Sensors Available: %s", status)
 
+    undo_listener = entry.add_update_listener(_async_update_listener)
+
     hass.data[DOMAIN][entry.entry_id] = {
         COORDINATOR: coordinator,
         PYNUT_DATA: data,
@@ -85,9 +91,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         PYNUT_MODEL: _model_from_status(status),
         PYNUT_FIRMWARE: _firmware_from_status(status),
         PYNUT_NAME: data.name,
+        UNDO_UPDATE_LISTENER: undo_listener,
     }
-
-    entry.add_update_listener(_async_update_listener)
 
     for component in PLATFORMS:
         hass.async_create_task(
@@ -171,6 +176,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
             ]
         )
     )
+
+    hass.data[DOMAIN][entry.entry_id][UNDO_UPDATE_LISTENER]()
+
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 
