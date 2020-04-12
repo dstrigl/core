@@ -20,8 +20,7 @@ from homeassistant.components.cover import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
-from pymodbus.payload import BinaryPayloadBuilder
-from pymodbus.payload import BinaryPayloadDecoder
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
