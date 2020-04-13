@@ -148,6 +148,7 @@ CHAR_TARGET_HUMIDITY = "TargetRelativeHumidity"
 CHAR_TARGET_SECURITY_STATE = "SecuritySystemTargetState"
 CHAR_TARGET_TEMPERATURE = "TargetTemperature"
 CHAR_TARGET_TILT_ANGLE = "TargetHorizontalTiltAngle"
+CHAR_HOLD_POSITION = "HoldPosition"
 CHAR_TEMP_DISPLAY_UNITS = "TemperatureDisplayUnits"
 CHAR_VALVE_TYPE = "ValveType"
 CHAR_VOLUME = "Volume"
@@ -182,3 +183,10 @@ THRESHOLD_CO2 = 1000
 # #### Default values ####
 DEFAULT_MIN_TEMP_WATER_HEATER = 40  # °C
 DEFAULT_MAX_TEMP_WATER_HEATER = 60  # °C
+
+# #### Door states ####
+HK_DOOR_OPEN = 0
+HK_DOOR_CLOSED = 1
+HK_DOOR_OPENING = 2
+HK_DOOR_CLOSING = 3
+HK_DOOR_STOPPED = 4
