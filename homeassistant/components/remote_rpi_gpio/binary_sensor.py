@@ -58,8 +58,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 address,
             )
             continue
-        # invert the 'invert_logic' in case of pull_mode UP, because of the behaviour of gpiozero.Button
-        #   and because that remote_rpi_gpio.read_input() is based on gpiozero.Button.is_pressed
+        # Because of the behaviour of 'gpiozero.Button' and the reason that
+        # 'remote_rpi_gpio.read_input()' is based on 'gpiozero.Button.is_pressed'
+        # 'invert_logic' must be inverted in case of pull_mode UP.
         new_sensor = RemoteRPiGPIOBinarySensor(
             port_name, button, invert_logic != (pull_mode == CONF_PULL_MODE_UP)
         )
