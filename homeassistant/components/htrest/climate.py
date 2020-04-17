@@ -337,16 +337,18 @@ class HtRestThermostat(ClimateDevice):
 
         try:
             data = await response.json()
-            self._target_temp = float(data[PARAM_HKR_SOLL_RAUM])
-            if data[PARAM_STOERUNG] or not data[PARAM_HAUPTSCHALTER]:
+            hkr_soll_raum = float(data[PARAM_HKR_SOLL_RAUM])
+            stoerung = data[PARAM_STOERUNG]
+            hauptschalter = data[PARAM_HAUPTSCHALTER]
+            verdichter_status = data[PARAM_VERDICHTER_STATUS]
+            verdichteranforderung = data[PARAM_VERDICHTERANFORDERUNG]
+            self._target_temp = hkr_soll_raum
+            if stoerung or not hauptschalter:
                 self._current_hvac_action = CURRENT_HVAC_OFF
             # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
             # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
             # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
-            elif (
-                data[PARAM_VERDICHTER_STATUS] == 9
-                and data[PARAM_VERDICHTERANFORDERUNG] == 2
-            ):
+            elif verdichter_status == 9 and verdichteranforderung == 2:
                 self._current_hvac_action = CURRENT_HVAC_HEAT
             else:
                 self._current_hvac_action = CURRENT_HVAC_IDLE
