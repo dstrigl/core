@@ -1,12 +1,13 @@
 """Support for Heliotherm heat pump thermostat via HtREST."""
-import json
 import asyncio
+import socket
 import logging
 from typing import Optional, List
 
 import aiohttp
 import async_timeout
 import voluptuous as vol
+from yarl import URL
 
 from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateDevice
 from homeassistant.components.climate.const import (
@@ -48,7 +49,7 @@ DEFAULT_MIN_TEMP = 10
 DEFAULT_MAX_TEMP = 25
 DEFAULT_STEP = 0.5
 
-URL_PARAM = "api/v1/param/"
+URI_PARAM = "param"
 PARAM_HKR_SOLL_RAUM = "HKR Soll_Raum"
 PARAM_STOERUNG = "Stoerung"
 PARAM_HAUPTSCHALTER = "Hauptschalter"
@@ -124,7 +125,9 @@ class HtRestThermostat(ClimateDevice):
         """Initialize the unit."""
         self._name = name
         self._sensor_entity_id = sensor_entity_id
-        self._resource = "http://{}:{}/{}".format(host, port, URL_PARAM)
+        self._url = URL.build(
+            scheme="http", host=host, port=port, path="/api/v1/"
+        ).join(URL(URI_PARAM))
         self._auth = auth
         self._timeout = timeout
         self._min_temp = min_temp
@@ -249,40 +252,52 @@ class HtRestThermostat(ClimateDevice):
         if temperature is None:
             return
         assert isinstance(temperature, float)
-        resource = self._resource + PARAM_HKR_SOLL_RAUM
+        url = self._url.join(URL(PARAM_HKR_SOLL_RAUM))
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
-                req = await websession.put(
-                    resource,
+                response = await websession.put(
+                    url,
                     auth=self._auth,
-                    data=bytes(json.dumps({"value": temperature}), "utf-8"),
+                    json={"value": temperature},
                     headers={
-                        "accept": "application/json",
+                        "Accept": "application/json",
                         "Content-Type": "application/json",
                     },
                 )
-            if req.status == 200:
-                text = await req.text()
-                self._target_temp = float(json.loads(text)["value"])
-                self._available = True
-                self.async_write_ha_state()
-            else:
-                _LOGGER.error(
-                    "Can't set target temperature (%s). Is resource/endpoint offline?",
-                    resource,
-                )
+                response.raise_for_status()
         except asyncio.TimeoutError:
             _LOGGER.exception(
-                "Timed out while setting target temperature (%s)", resource
+                "Timeout occurred while setting target temperature (%s)", url
             )
-        except aiohttp.ClientError as err:
+            return
+        except (
+            aiohttp.ClientError,
+            aiohttp.ClientResponseError,
+            socket.gaierror,
+        ) as err:
             _LOGGER.exception(
-                "Error while setting target temperature (%s): %s", resource, err
+                "Error while setting target temperature (%s): %s", url, err
             )
+            return
+
+        content_type = response.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            text = await response.text()
+            _LOGGER.error("Unexpected response from %s: %s", url, text)
+            return
+
+        try:
+            data = await response.json()
+            self._target_temp = float(data["value"])
+            self._available = True
+            self.async_write_ha_state()
+        except (KeyError, ValueError) as err:
+            _LOGGER.exception("Invalid response from %s: %s", url, err)
 
     async def async_update(self) -> None:
-        """Update target temperature."""
+        """Update target temperature and current HVAC action."""
+        url = self._url
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
@@ -293,37 +308,49 @@ class HtRestThermostat(ClimateDevice):
                     PARAM_VERDICHTER_STATUS,
                     PARAM_VERDICHTERANFORDERUNG,
                 )
-                req = await websession.get(
-                    self._resource,
+                response = await websession.get(
+                    url,
                     auth=self._auth,
-                    headers={"accept": "application/json"},
+                    headers={"Accept": "application/json"},
                     params={param: "" for param in params},
                 )
-                text = await req.text()
-            try:
-                values = json.loads(text)
-                self._target_temp = float(values[PARAM_HKR_SOLL_RAUM])
-                if values[PARAM_STOERUNG] or not values[PARAM_HAUPTSCHALTER]:
-                    self._current_hvac_action = CURRENT_HVAC_OFF
-                # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
-                # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
-                # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
-                elif (
-                    values[PARAM_VERDICHTER_STATUS] == 9
-                    and values[PARAM_VERDICHTERANFORDERUNG] == 2
-                ):
-                    self._current_hvac_action = CURRENT_HVAC_HEAT
-                else:
-                    self._current_hvac_action = CURRENT_HVAC_IDLE
-                self._available = True
-            except Exception:
-                _LOGGER.exception("Invalid response from %s: %s", self._resource, text)
-                self._available = False
+                response.raise_for_status()
         except asyncio.TimeoutError:
-            _LOGGER.exception("Timed out while fetching data from %s", self._resource)
+            _LOGGER.exception("Timeout occurred while fetching data from %s", url)
             self._available = False
-        except aiohttp.ClientError as err:
-            _LOGGER.exception(
-                "Error while fetching data from %s: %s", self._resource, err
-            )
+            return
+        except (
+            aiohttp.ClientError,
+            aiohttp.ClientResponseError,
+            socket.gaierror,
+        ) as err:
+            _LOGGER.exception("Error while fetching data from %s: %s", url, err)
+            self._available = False
+            return
+
+        content_type = response.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            text = await response.text()
+            _LOGGER.error("Unexpected response from %s: %s", url, text)
+            self._available = False
+            return
+
+        try:
+            data = await response.json()
+            self._target_temp = float(data[PARAM_HKR_SOLL_RAUM])
+            if data[PARAM_STOERUNG] or not data[PARAM_HAUPTSCHALTER]:
+                self._current_hvac_action = CURRENT_HVAC_OFF
+            # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
+            # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
+            # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
+            elif (
+                data[PARAM_VERDICHTER_STATUS] == 9
+                and data[PARAM_VERDICHTERANFORDERUNG] == 2
+            ):
+                self._current_hvac_action = CURRENT_HVAC_HEAT
+            else:
+                self._current_hvac_action = CURRENT_HVAC_IDLE
+            self._available = True
+        except (KeyError, ValueError) as err:
+            _LOGGER.exception("Invalid response from %s: %s", url, err)
             self._available = False
