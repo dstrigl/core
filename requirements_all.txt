@@ -211,7 +211,7 @@ aiopylgtv==0.3.3
 aioswitcher==1.1.0
 
 # homeassistant.components.unifi
-aiounifi==17
+aiounifi==18
 
 # homeassistant.components.wwlln
 aiowwlln==2.0.2
@@ -358,7 +358,7 @@ boto3==1.9.252
 bravia-tv==1.0.1
 
 # homeassistant.components.broadlink
-broadlink==0.13.0
+broadlink==0.13.1
 
 # homeassistant.components.brother
 brother==0.1.11
@@ -1326,7 +1326,7 @@ pyhik==0.2.7
 pyhiveapi==0.2.20.1
 
 # homeassistant.components.homematic
-pyhomematic==0.1.65
+pyhomematic==0.1.66
 
 # homeassistant.components.homeworks
 pyhomeworks==0.0.6
@@ -1338,7 +1338,7 @@ pyialarm==0.3
 pyicloud==0.9.6.1
 
 # homeassistant.components.intesishome
-pyintesishome==1.7.3
+pyintesishome==1.7.4
 
 # homeassistant.components.ipma
 pyipma==2.0.5
