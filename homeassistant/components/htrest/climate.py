@@ -175,7 +175,7 @@ class HtRestThermostat(ClimateDevice):
         try:
             self._current_temp = float(state.state)
         except ValueError as ex:
-            _LOGGER.error("Unable to update from sensor: %s", ex)
+            _LOGGER.exception("Unable to update from sensor: %s", ex)
 
     @property
     def name(self) -> str:
@@ -289,11 +289,14 @@ class HtRestThermostat(ClimateDevice):
 
         try:
             data = await response.json()
-            self._target_temp = float(data["value"])
-            self._available = True
-            self.async_write_ha_state()
+            hkr_soll_raum = float(data[PARAM_HKR_SOLL_RAUM])
         except (KeyError, ValueError) as err:
             _LOGGER.exception("Invalid response from %s: %s", url, err)
+            return
+
+        self._target_temp = hkr_soll_raum
+        self._available = True
+        self.async_write_ha_state()
 
     async def async_update(self) -> None:
         """Update target temperature and current HVAC action."""
@@ -338,21 +341,23 @@ class HtRestThermostat(ClimateDevice):
         try:
             data = await response.json()
             hkr_soll_raum = float(data[PARAM_HKR_SOLL_RAUM])
-            stoerung = data[PARAM_STOERUNG]
-            hauptschalter = data[PARAM_HAUPTSCHALTER]
-            verdichter_status = data[PARAM_VERDICHTER_STATUS]
-            verdichteranforderung = data[PARAM_VERDICHTERANFORDERUNG]
-            self._target_temp = hkr_soll_raum
-            if stoerung or not hauptschalter:
-                self._current_hvac_action = CURRENT_HVAC_OFF
-            # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
-            # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
-            # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
-            elif verdichter_status == 9 and verdichteranforderung == 2:
-                self._current_hvac_action = CURRENT_HVAC_HEAT
-            else:
-                self._current_hvac_action = CURRENT_HVAC_IDLE
-            self._available = True
+            stoerung = bool(data[PARAM_STOERUNG])
+            hauptschalter = bool(data[PARAM_HAUPTSCHALTER])
+            verdichter_status = int(data[PARAM_VERDICHTER_STATUS])
+            verdichteranforderung = int(data[PARAM_VERDICHTERANFORDERUNG])
         except (KeyError, ValueError) as err:
             _LOGGER.exception("Invalid response from %s: %s", url, err)
             self._available = False
+            return
+
+        self._target_temp = hkr_soll_raum
+        if stoerung or not hauptschalter:
+            self._current_hvac_action = CURRENT_HVAC_OFF
+        # PARAM_VERDICHTER_STATUS == 9 --> Verdichter läuft
+        # PARAM_VERDICHTERANFORDERUNG == 2 --> Heizen
+        # PARAM_VERDICHTERANFORDERUNG == 3 --> WW
+        elif verdichter_status == 9 and verdichteranforderung == 2:
+            self._current_hvac_action = CURRENT_HVAC_HEAT
+        else:
+            self._current_hvac_action = CURRENT_HVAC_IDLE
+        self._available = True
