@@ -1,7 +1,7 @@
 """Support for Modbus lights."""
 import logging
 
-from pymodbus.exceptions import ModbusException
+from pymodbus.exceptions import ConnectionException, ModbusException
 from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
@@ -38,7 +38,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None):
     """Read configuration and create Modbus devices."""
     hub_name = config[CONF_HUB]
     hub = hass.data[MODBUS_DOMAIN][hub_name]
@@ -47,7 +47,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     state_coil = config[CONF_STATE_COIL]
     brightness_register = config.get(CONF_BRIGHTNESS_REGISTER)
 
-    async_add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
+    add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
 
 
 class ModbusLight(Light):
@@ -94,45 +94,62 @@ class ModbusLight(Light):
         """Return the brightness of this light between 0..255."""
         return self._brightness
 
-    async def _write_coil(self, coil, value):
+    def _write_coil(self, coil, value):
         """Write coil using the Modbus hub slave."""
-        await self._hub.write_coil(self._slave, coil, value)
+        try:
+            self._hub.write_coil(self._slave, coil, value)
+        except ConnectionException:
+            self._available = False
+            return
         self._available = True
 
-    async def async_turn_on(self, **kwargs):
+    def turn_on(self, **kwargs):
         """Turn on the light."""
         if self.supported_features & SUPPORT_BRIGHTNESS and ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS])
             brightness = max(0, min(255, brightness))
             builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
             builder.add_16bit_uint(brightness)
-            await self._hub.write_registers(
-                self._slave, self._brightness_register, builder.to_registers()
-            )
-        await self._write_coil(self._state_coil, True)
+            try:
+                self._hub.write_registers(
+                    self._slave, self._brightness_register, builder.to_registers()
+                )
+            except ConnectionException:
+                self._available = False
+                return
+        self._write_coil(self._state_coil, True)
 
-    async def async_turn_off(self, **kwargs):
+    def turn_off(self, **kwargs):
         """Turn off the light."""
-        await self._write_coil(self._state_coil, False)
+        self._write_coil(self._state_coil, False)
 
-    async def async_update(self):
+    def update(self):
         """Update the state of the light."""
+        brightness = None
         if self.supported_features & SUPPORT_BRIGHTNESS:
-            result = await self._hub.read_holding_registers(
-                self._slave, self._brightness_register, 1
-            )
-            if result is None or isinstance(
-                result, (ModbusException, ExceptionResponse)
-            ):
+            try:
+                result = self._hub.read_holding_registers(
+                    self._slave, self._brightness_register, 1
+                )
+            except ConnectionException:
+                self._available = False
+                return
+            if isinstance(result, (ModbusException, ExceptionResponse)):
                 self._available = False
                 return
             dec = BinaryPayloadDecoder.fromRegisters(
                 result.registers, byteorder=BYTEORDER
             )
-            self._brightness = dec.decode_16bit_uint()
-        result = await self._hub.read_coils(self._slave, self._state_coil, 1)
-        if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
+            brightness = dec.decode_16bit_uint()
+        try:
+            result = self._hub.read_coils(self._slave, self._state_coil, 1)
+        except ConnectionException:
+            self._available = False
+            return
+        if isinstance(result, (ModbusException, ExceptionResponse)):
             self._available = False
             return
         self._is_on = bool(result.bits[0])
+        if brightness is not None:
+            self._brightness = brightness
         self._available = True

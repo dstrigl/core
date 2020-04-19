@@ -2,7 +2,7 @@
 import logging
 from typing import Optional
 
-from pymodbus.exceptions import ModbusException
+from pymodbus.exceptions import ConnectionException, ModbusException
 from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
@@ -51,7 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None):
     """Read configuration and create Modbus devices."""
     hub_name = config[CONF_HUB]
     hub = hass.data[MODBUS_DOMAIN][hub_name]
@@ -60,7 +60,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     current_status_addr = config[CONF_CURRENT_STATUS_ADDR]
     request_status_addr = config[CONF_REQUEST_STATUS_ADDR]
 
-    async_add_entities(
+    add_entities(
         [ModbusCover(hub, name, slave, current_status_addr, request_status_addr)]
     )
 
@@ -154,58 +154,66 @@ class ModbusCover(CoverDevice):
             return None
         return self._cover_position == 0 and self._cover_tilt_position < 2
 
-    async def _write_registers(self, address, values) -> None:
+    def _write_registers(self, address, values) -> None:
         """Write holding registers using the Modbus hub slave."""
-        await self._hub.write_registers(self._slave, address, values)
+        try:
+            self._hub.write_registers(self._slave, address, values)
+        except ConnectionException:
+            self._available = False
+            return
         self._available = True
 
-    async def async_open_cover(self, **kwargs):
+    def open_cover(self, **kwargs):
         """Open the cover."""
         builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
         builder.add_16bit_uint(STATUS_OPEN)
-        await self._write_registers(self._request_status_addr, builder.to_registers())
+        self._write_registers(self._request_status_addr, builder.to_registers())
 
-    async def async_close_cover(self, **kwargs):
+    def close_cover(self, **kwargs):
         """Close cover."""
         builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
         builder.add_16bit_uint(STATUS_CLOSE)
-        await self._write_registers(self._request_status_addr, builder.to_registers())
+        self._write_registers(self._request_status_addr, builder.to_registers())
 
-    async def async_stop_cover(self, **kwargs):
+    def stop_cover(self, **kwargs):
         """Stop the cover."""
         builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
         builder.add_16bit_uint(STATUS_STANDBY)
-        await self._write_registers(self._request_status_addr, builder.to_registers())
+        self._write_registers(self._request_status_addr, builder.to_registers())
 
-    async def _set_position_and_angle(self, position, angle) -> None:
+    def _set_position_and_angle(self, position, angle) -> None:
         position = int(scale_to_255(position))
         angle = int(scale_to_255(angle))
         builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
         builder.add_16bit_uint(STATUS_SET)
         builder.add_16bit_uint(position)
         builder.add_16bit_uint(angle)
-        await self._write_registers(self._request_status_addr, builder.to_registers())
+        self._write_registers(self._request_status_addr, builder.to_registers())
 
-    async def async_set_cover_position(self, **kwargs):
+    def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
         if ATTR_POSITION in kwargs:
-            await self._set_position_and_angle(
+            self._set_position_and_angle(
                 kwargs[ATTR_POSITION], self._cover_tilt_position
             )
 
-    async def async_set_cover_tilt_position(self, **kwargs):
+    def set_cover_tilt_position(self, **kwargs):
         """Move the cover tilt to a specific position."""
         if ATTR_TILT_POSITION in kwargs:
-            await self._set_position_and_angle(
+            self._set_position_and_angle(
                 self._cover_position, kwargs[ATTR_TILT_POSITION]
             )
 
-    async def async_update(self):
+    def update(self):
         """Update the state of the cover."""
-        result = await self._hub.read_holding_registers(
-            self._slave, self._current_status_addr, 3
-        )
-        if result is None or isinstance(result, (ModbusException, ExceptionResponse)):
+        try:
+            result = self._hub.read_holding_registers(
+                self._slave, self._current_status_addr, 3
+            )
+        except ConnectionException:
+            self._available = False
+            return
+        if isinstance(result, (ModbusException, ExceptionResponse)):
             self._available = False
             return
         dec = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=BYTEORDER)
