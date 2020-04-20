@@ -125,9 +125,7 @@ class HtRestThermostat(ClimateDevice):
         """Initialize the unit."""
         self._name = name
         self._sensor_entity_id = sensor_entity_id
-        self._url = URL.build(
-            scheme="http", host=host, port=port, path="/api/v1/"
-        ).join(URL(URI_PARAM))
+        self._url = URL.build(scheme="http", host=host, port=port, path="/api/v1/")
         self._auth = auth
         self._timeout = timeout
         self._min_temp = min_temp
@@ -252,7 +250,7 @@ class HtRestThermostat(ClimateDevice):
         if temperature is None:
             return
         assert isinstance(temperature, float)
-        url = self._url.join(URL(PARAM_HKR_SOLL_RAUM))
+        url = self._url / URI_PARAM / PARAM_HKR_SOLL_RAUM
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
@@ -300,7 +298,7 @@ class HtRestThermostat(ClimateDevice):
 
     async def async_update(self) -> None:
         """Update target temperature and current HVAC action."""
-        url = self._url
+        url = self._url / URI_PARAM
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
