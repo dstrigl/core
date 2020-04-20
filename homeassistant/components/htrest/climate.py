@@ -287,7 +287,7 @@ class HtRestThermostat(ClimateDevice):
 
         try:
             data = await response.json()
-            hkr_soll_raum = float(data[PARAM_HKR_SOLL_RAUM])
+            hkr_soll_raum = float(data["value"])
         except (KeyError, ValueError) as err:
             _LOGGER.exception("Invalid response from %s: %s", url, err)
             return
