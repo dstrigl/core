@@ -29,6 +29,25 @@ REMOVED_TITLE_MSG = (
     "manifest."
 )
 
+MOVED_TRANSLATIONS_DIRECTORY_MSG = (
+    "The '.translations' directory has been moved, the new name is 'translations', "
+    "starting with Home Assistant 0.111 your translations will no longer "
+    "load if you do not move/rename this "
+)
+
+
+def check_translations_directory_name(integration: Integration) -> None:
+    """Check that the correct name is used for the translations directory."""
+    legacy_translations = integration.path / ".translations"
+    translations = integration.path / "translations"
+
+    if translations.is_dir():
+        # No action required
+        return
+
+    if legacy_translations.is_dir():
+        integration.add_warning("translations", MOVED_TRANSLATIONS_DIRECTORY_MSG)
+
 
 def find_references(strings, prefix, found):
     """Find references."""
@@ -188,6 +207,9 @@ ONBOARDING_SCHEMA = vol.Schema({vol.Required("area"): {str: str}})
 
 def validate_translation_file(config: Config, integration: Integration, all_strings):
     """Validate translation files for integration."""
+    if config.specific_integrations:
+        check_translations_directory_name(integration)
+
     strings_file = integration.path / "strings.json"
     references = []
 
@@ -237,8 +259,7 @@ def validate_translation_file(config: Config, integration: Integration, all_stri
             search = search[key]
             key = parts.pop(0)
 
-        if parts:
-            print(key, list(search))
+        if parts or key not in search:
             integration.add_error(
                 "translations",
                 f"{reference['source']} contains invalid reference {reference['ref']}: Could not find {key}",
