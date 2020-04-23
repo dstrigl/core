@@ -144,7 +144,7 @@ aio_georss_gdacs==0.3
 aioambient==1.1.1
 
 # homeassistant.components.asuswrt
-aioasuswrt==1.2.3
+aioasuswrt==1.2.5
 
 # homeassistant.components.automatic
 aioautomatic==0.6.5
@@ -333,7 +333,7 @@ bimmer_connected==0.7.5
 bizkaibus==0.1.1
 
 # homeassistant.components.blink
-blinkpy==0.14.2
+blinkpy==0.14.3
 
 # homeassistant.components.blinksticklight
 blinkstick==1.1.8
@@ -1173,13 +1173,16 @@ pyaehw4a1==0.3.4
 pyaftership==0.1.2
 
 # homeassistant.components.airvisual
-pyairvisual==3.0.1
+pyairvisual==4.3.0
 
 # homeassistant.components.almond
 pyalmond==0.0.2
 
 # homeassistant.components.arlo
 pyarlo==0.2.3
+
+# homeassistant.components.atag
+pyatag==0.2.18
 
 # homeassistant.components.netatmo
 pyatmo==3.3.0
@@ -1677,7 +1680,7 @@ python-sochain-api==0.0.2
 python-songpal==0.11.2
 
 # homeassistant.components.synology_dsm
-python-synology==0.6.0
+python-synology==0.7.0
 
 # homeassistant.components.tado
 python-tado==0.8.1
@@ -2023,7 +2026,7 @@ temperusb==1.5.3
 # tensorflow==1.13.2
 
 # homeassistant.components.powerwall
-tesla-powerwall==0.2.5
+tesla-powerwall==0.2.8
 
 # homeassistant.components.tesla
 teslajsonpy==0.8.0
