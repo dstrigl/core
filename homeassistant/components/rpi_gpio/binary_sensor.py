@@ -3,7 +3,8 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components.binary_sensor import PLATFORM_SCHEMA, BinarySensorDevice
+from homeassistant.components import rpi_gpio
+from homeassistant.components.binary_sensor import PLATFORM_SCHEMA, BinarySensorEntity
 from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
 
@@ -16,7 +17,6 @@ from . import (
     DEFAULT_PULL_MODE,
     PULL_MODES,
 )
-from .. import rpi_gpio
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(binary_sensors, True)
 
 
-class RPiGPIOBinarySensor(BinarySensorDevice):
+class RPiGPIOBinarySensor(BinarySensorEntity):
     """Represent a binary sensor that uses Raspberry Pi GPIO."""
 
     def __init__(self, name, port, pull_mode, bouncetime, invert_logic):
