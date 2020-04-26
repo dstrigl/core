@@ -16,7 +16,7 @@ from homeassistant.components.cover import (
     SUPPORT_SET_POSITION,
     SUPPORT_SET_TILT_POSITION,
     SUPPORT_STOP,
-    CoverDevice,
+    CoverEntity,
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
@@ -75,7 +75,7 @@ def scale_to_100(value):
     return max(0, min(100, ((value * 100.0) / 255.0)))
 
 
-class ModbusCover(CoverDevice):
+class ModbusCover(CoverEntity):
     """Representation of a Modbus cover."""
 
     def __init__(self, hub, name, slave, current_status_addr, request_status_addr):
