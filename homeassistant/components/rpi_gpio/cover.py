@@ -4,12 +4,12 @@ from time import sleep
 
 import voluptuous as vol
 
-from homeassistant.components.cover import PLATFORM_SCHEMA, CoverDevice
+from homeassistant.components import rpi_gpio
+from homeassistant.components.cover import PLATFORM_SCHEMA, CoverEntity
 from homeassistant.const import CONF_NAME
 import homeassistant.helpers.config_validation as cv
 
 from . import DEFAULT_PULL_MODE, PULL_MODES
-from .. import rpi_gpio
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(covers)
 
 
-class RPiGPIOCover(CoverDevice):
+class RPiGPIOCover(CoverEntity):
     """Representation of a Raspberry GPIO cover."""
 
     def __init__(
