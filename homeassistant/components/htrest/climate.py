@@ -9,7 +9,7 @@ import async_timeout
 import voluptuous as vol
 from yarl import URL
 
-from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateDevice
+from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateEntity
 from homeassistant.components.climate.const import (
     HVAC_MODE_AUTO,
     SUPPORT_TARGET_TEMPERATURE,
@@ -107,7 +107,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
     )
 
 
-class HtRestThermostat(ClimateDevice):
+class HtRestThermostat(ClimateEntity):
     """Representation of a Heliotherm heat pump thermostat."""
 
     def __init__(
