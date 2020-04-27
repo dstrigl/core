@@ -9,7 +9,7 @@ from homeassistant.components.light import (
     PLATFORM_SCHEMA,
     ATTR_BRIGHTNESS,
     SUPPORT_BRIGHTNESS,
-    Light,
+    LightEntity,
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
@@ -50,7 +50,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities([ModbusLight(hub, name, slave, state_coil, brightness_register)])
 
 
-class ModbusLight(Light):
+class ModbusLight(LightEntity):
     """Representation of a Modbus light."""
 
     def __init__(self, hub, name, slave, state_coil, brightness_register):
