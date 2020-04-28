@@ -119,7 +119,7 @@ apprise==0.8.5
 aprslib==0.6.46
 
 # homeassistant.components.arcam_fmj
-arcam-fmj==0.4.3
+arcam-fmj==0.4.4
 
 # homeassistant.components.dlna_dmr
 # homeassistant.components.upnp
@@ -722,7 +722,7 @@ sentry-sdk==0.13.5
 simplehound==0.3
 
 # homeassistant.components.simplisafe
-simplisafe-python==9.1.0
+simplisafe-python==9.2.0
 
 # homeassistant.components.sleepiq
 sleepyq==0.7
