@@ -35,7 +35,7 @@ Adafruit-SHT31==1.0.2
 # Adafruit_BBIO==1.1.1
 
 # homeassistant.components.homekit
-HAP-python==2.8.2
+HAP-python==2.8.3
 
 # homeassistant.components.mastodon
 Mastodon.py==1.5.1
@@ -686,7 +686,7 @@ habitipy==0.2.0
 hangups==0.4.9
 
 # homeassistant.components.cloud
-hass-nabucasa==0.34.1
+hass-nabucasa==0.34.2
 
 # homeassistant.components.mqtt
 hbmqtt==0.9.5
@@ -1104,6 +1104,9 @@ ptvsd==4.2.8
 
 # homeassistant.components.wink
 pubnubsub-handler==1.0.8
+
+# homeassistant.components.pulseaudio_loopback
+pulsectl==20.2.4
 
 # homeassistant.components.androidtv
 pure-python-adb==0.2.2.dev0
@@ -1689,7 +1692,7 @@ python-sochain-api==0.0.2
 python-songpal==0.11.2
 
 # homeassistant.components.synology_dsm
-python-synology==0.7.3
+python-synology==0.7.4
 
 # homeassistant.components.tado
 python-tado==0.8.1
@@ -1834,7 +1837,7 @@ rocketchat-API==0.6.1
 roku==4.1.0
 
 # homeassistant.components.roomba
-roombapy==1.5.1
+roombapy==1.5.2
 
 # homeassistant.components.rova
 rova==0.1.0
