@@ -692,7 +692,7 @@ ha-ffmpeg==2.0
 ha-philipsjs==0.0.8
 
 # homeassistant.components.plugwise
-haanna==0.14.3
+haanna==0.15.0
 
 # homeassistant.components.habitica
 habitipy==0.2.0
@@ -731,7 +731,7 @@ hole==0.5.1
 holidays==0.10.2
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200513.0
+home-assistant-frontend==20200514.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
