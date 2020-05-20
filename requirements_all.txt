@@ -734,7 +734,7 @@ hole==0.5.1
 holidays==0.10.2
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200518.0
+home-assistant-frontend==20200519.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -1375,7 +1375,7 @@ pyialarm==0.3
 pyicloud==0.9.7
 
 # homeassistant.components.insteon
-pyinsteon==1.0.0
+pyinsteon==1.0.1
 
 # homeassistant.components.intesishome
 pyintesishome==1.7.4
