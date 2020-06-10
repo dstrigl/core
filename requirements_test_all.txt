@@ -333,7 +333,7 @@ homeassistant-pyozw==0.1.10
 homeconnect==0.5
 
 # homeassistant.components.homematicip_cloud
-homematicip==0.10.17
+homematicip==0.10.18
 
 # homeassistant.components.google
 # homeassistant.components.remember_the_milk
@@ -826,6 +826,9 @@ sonarr==0.2.2
 
 # homeassistant.components.marytts
 speak2mary==1.4.0
+
+# homeassistant.components.speedtestdotnet
+speedtest-cli==2.1.2
 
 # homeassistant.components.spotify
 spotipy==2.12.0
