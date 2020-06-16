@@ -43,7 +43,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
                 address,
             )
             continue
-        new_switch = RemoteRPiGPIOSwitch(port_name, led, invert_logic)
+        new_switch = RemoteRPiGPIOSwitch(port_name, led)
         devices.append(new_switch)
 
     add_entities(devices)
@@ -52,12 +52,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 class RemoteRPiGPIOSwitch(ToggleEntity):
     """Representation of a Remtoe Raspberry Pi GPIO."""
 
-    def __init__(self, name, led, invert_logic):
+    def __init__(self, name, led):
         """Initialize the pin."""
         self._name = name or DEVICE_DEFAULT_NAME
-        self._switch = led
-        self._invert_logic = invert_logic
         self._state = False
+        self._switch = led
 
     @property
     def name(self):
@@ -76,12 +75,12 @@ class RemoteRPiGPIOSwitch(ToggleEntity):
 
     def turn_on(self, **kwargs):
         """Turn the device on."""
-        remote_rpi_gpio.write_output(self._switch, 0 if self._invert_logic else 1)
+        remote_rpi_gpio.write_output(self._switch, 1)
         self._state = True
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs):
         """Turn the device off."""
-        remote_rpi_gpio.write_output(self._switch, 1 if self._invert_logic else 0)
+        remote_rpi_gpio.write_output(self._switch, 0)
         self._state = False
         self.schedule_update_ha_state()

@@ -28,7 +28,7 @@ def setup(hass, config):
 
 def setup_output(address, port, invert_logic):
     """Set up a GPIO as output."""
-    return LED(port, initial_value=invert_logic, pin_factory=PiGPIOFactory(address))
+    return LED(port, active_high=not invert_logic, pin_factory=PiGPIOFactory(address))
 
 
 def setup_input(address, port, pull_mode, bouncetime):
