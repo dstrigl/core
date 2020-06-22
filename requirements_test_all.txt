@@ -85,7 +85,7 @@ aiofreepybox==0.0.8
 aioguardian==0.2.3
 
 # homeassistant.components.harmony
-aioharmony==0.2.4
+aioharmony==0.2.5
 
 # homeassistant.components.homekit_controller
 aiohomekit[IP]==0.2.38
@@ -233,7 +233,7 @@ doorbirdpy==2.0.8
 dsmr_parser==0.18
 
 # homeassistant.components.dynalite
-dynalite_devices==0.1.40
+dynalite_devices==0.1.41
 
 # homeassistant.components.ee_brightbox
 eebrightbox==0.0.4
@@ -243,6 +243,9 @@ elgato==0.2.0
 
 # homeassistant.components.elkm1
 elkm1-lib==0.7.18
+
+# homeassistant.components.mobile_app
+emoji==0.5.4
 
 # homeassistant.components.emulated_roku
 emulated_roku==0.2.1
@@ -331,7 +334,7 @@ hole==0.5.1
 holidays==0.10.2
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200617.0
+home-assistant-frontend==20200620.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -491,7 +494,7 @@ prayer_times_calculator==0.0.3
 prometheus_client==0.7.1
 
 # homeassistant.components.ptvsd
-ptvsd==4.2.8
+ptvsd==4.3.2
 
 # homeassistant.components.androidtv
 pure-python-adb==0.2.2.dev0
@@ -528,7 +531,7 @@ pyTibber==0.14.0
 py_nextbusnext==0.1.4
 
 # homeassistant.components.hisense_aehw4a1
-pyaehw4a1==0.3.4
+pyaehw4a1==0.3.5
 
 # homeassistant.components.airvisual
 pyairvisual==4.4.0
@@ -757,7 +760,7 @@ python-twitch-client==0.6.0
 python-velbus==2.0.43
 
 # homeassistant.components.awair
-python_awair==0.0.4
+python_awair==0.1.1
 
 # homeassistant.components.tile
 pytile==3.0.6
@@ -799,7 +802,7 @@ rflink==0.0.52
 ring_doorbell==0.6.0
 
 # homeassistant.components.roku
-rokuecp==0.4.2
+rokuecp==0.5.0
 
 # homeassistant.components.roomba
 roombapy==1.6.1
