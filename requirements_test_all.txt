@@ -153,7 +153,7 @@ av==8.0.2
 avri-api==0.1.7
 
 # homeassistant.components.axis
-axis==32
+axis==33
 
 # homeassistant.components.homekit
 base36==0.1.1
@@ -322,7 +322,7 @@ ha-ffmpeg==2.0
 hangups==0.4.9
 
 # homeassistant.components.cloud
-hass-nabucasa==0.34.6
+hass-nabucasa==0.34.7
 
 # homeassistant.components.mqtt
 hbmqtt==0.9.5
@@ -439,7 +439,7 @@ numato-gpio==0.7.1
 # homeassistant.components.opencv
 # homeassistant.components.tensorflow
 # homeassistant.components.trend
-numpy==1.18.5
+numpy==1.19.0
 
 # homeassistant.components.google
 oauth2client==4.0.0
@@ -733,7 +733,7 @@ pyspcwebgw==0.4.0
 pysqueezebox==0.2.4
 
 # homeassistant.components.ecobee
-python-ecobee-api==0.2.5
+python-ecobee-api==0.2.7
 
 # homeassistant.components.darksky
 python-forecastio==1.4.0
@@ -890,7 +890,7 @@ tesla-powerwall==0.2.11
 teslajsonpy==0.8.1
 
 # homeassistant.components.toon
-toonapilib==3.2.4
+toonapi==0.1.0
 
 # homeassistant.components.totalconnect
 total_connect_client==0.55

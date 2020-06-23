@@ -13,7 +13,11 @@ import voluptuous as vol
 
 from homeassistant.components import recorder
 from homeassistant.components.http import HomeAssistantView
-from homeassistant.components.recorder.models import States, process_timestamp
+from homeassistant.components.recorder.models import (
+    States,
+    process_timestamp,
+    process_timestamp_to_utc_isoformat,
+)
 from homeassistant.components.recorder.util import execute, session_scope
 from homeassistant.const import (
     ATTR_HIDDEN,
@@ -46,9 +50,21 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-SIGNIFICANT_DOMAINS = ("climate", "device_tracker", "thermostat", "water_heater")
+SIGNIFICANT_DOMAINS = (
+    "climate",
+    "device_tracker",
+    "humidifier",
+    "thermostat",
+    "water_heater",
+)
 IGNORE_DOMAINS = ("zone", "scene")
-NEED_ATTRIBUTE_DOMAINS = {"climate", "water_heater", "thermostat", "script"}
+NEED_ATTRIBUTE_DOMAINS = {
+    "climate",
+    "humidifier",
+    "script",
+    "thermostat",
+    "water_heater",
+}
 SCRIPT_DOMAIN = "script"
 ATTR_CAN_CANCEL = "can_cancel"
 
@@ -318,7 +334,7 @@ def _sorted_states_to_json(
 
     # Called in a tight loop so cache the function
     # here
-    _process_timestamp = process_timestamp
+    _process_timestamp_to_utc_isoformat = process_timestamp_to_utc_isoformat
 
     # Append all changes to it
     for ent_id, group in groupby(states, lambda state: state.entity_id):
@@ -362,9 +378,9 @@ def _sorted_states_to_json(
             ent_results.append(
                 {
                     STATE_KEY: db_state.state,
-                    LAST_CHANGED_KEY: _process_timestamp(
+                    LAST_CHANGED_KEY: _process_timestamp_to_utc_isoformat(
                         db_state.last_changed
-                    ).isoformat(),
+                    ),
                 }
             )
             prev_state = db_state
@@ -423,7 +439,7 @@ class HistoryPeriodView(HomeAssistantView):
         self, request: web.Request, datetime: Optional[str] = None
     ) -> web.Response:
         """Return history over a period of time."""
-
+        datetime_ = None
         if datetime:
             datetime_ = dt_util.parse_datetime(datetime)
 
