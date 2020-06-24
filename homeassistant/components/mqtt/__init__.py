@@ -8,7 +8,6 @@ import logging
 from operator import attrgetter
 import os
 import ssl
-import sys
 from typing import Any, Callable, List, Optional, Union
 
 import attr
@@ -42,7 +41,7 @@ from homeassistant.util.logging import catch_log_exception
 
 # Loading the config flow file will register the flow
 from . import config_flow  # noqa: F401 pylint: disable=unused-import
-from . import debug_info, discovery, server
+from . import debug_info, discovery
 from .const import (
     ATTR_DISCOVERY_HASH,
     ATTR_DISCOVERY_TOPIC,
@@ -79,8 +78,6 @@ DATA_MQTT_CONFIG = "mqtt_config"
 
 SERVICE_PUBLISH = "publish"
 SERVICE_DUMP = "dump"
-
-CONF_EMBEDDED = "embedded"
 
 CONF_DISCOVERY_PREFIX = "discovery_prefix"
 CONF_KEEPALIVE = "keepalive"
@@ -163,42 +160,42 @@ def embedded_broker_deprecated(value):
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN: vol.Schema(
-            {
-                vol.Optional(CONF_CLIENT_ID): cv.string,
-                vol.Optional(CONF_KEEPALIVE, default=DEFAULT_KEEPALIVE): vol.All(
-                    vol.Coerce(int), vol.Range(min=15)
-                ),
-                vol.Optional(CONF_BROKER): cv.string,
-                vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-                vol.Optional(CONF_USERNAME): cv.string,
-                vol.Optional(CONF_PASSWORD): cv.string,
-                vol.Optional(CONF_CERTIFICATE): vol.Any("auto", cv.isfile),
-                vol.Inclusive(
-                    CONF_CLIENT_KEY, "client_key_auth", msg=CLIENT_KEY_AUTH_MSG
-                ): cv.isfile,
-                vol.Inclusive(
-                    CONF_CLIENT_CERT, "client_key_auth", msg=CLIENT_KEY_AUTH_MSG
-                ): cv.isfile,
-                vol.Optional(CONF_TLS_INSECURE): cv.boolean,
-                vol.Optional(CONF_TLS_VERSION, default=DEFAULT_TLS_PROTOCOL): vol.Any(
-                    "auto", "1.0", "1.1", "1.2"
-                ),
-                vol.Optional(CONF_PROTOCOL, default=DEFAULT_PROTOCOL): vol.All(
-                    cv.string, vol.In([PROTOCOL_31, PROTOCOL_311])
-                ),
-                vol.Optional(CONF_EMBEDDED): vol.All(
-                    server.HBMQTT_CONFIG_SCHEMA, embedded_broker_deprecated
-                ),
-                vol.Optional(CONF_WILL_MESSAGE): MQTT_WILL_BIRTH_SCHEMA,
-                vol.Optional(CONF_BIRTH_MESSAGE): MQTT_WILL_BIRTH_SCHEMA,
-                vol.Optional(CONF_DISCOVERY, default=DEFAULT_DISCOVERY): cv.boolean,
-                # discovery_prefix must be a valid publish topic because if no
-                # state topic is specified, it will be created with the given prefix.
-                vol.Optional(
-                    CONF_DISCOVERY_PREFIX, default=DEFAULT_DISCOVERY_PREFIX
-                ): valid_publish_topic,
-            }
+        DOMAIN: vol.All(
+            cv.deprecated(CONF_TLS_VERSION, invalidation_version="0.115"),
+            vol.Schema(
+                {
+                    vol.Optional(CONF_CLIENT_ID): cv.string,
+                    vol.Optional(CONF_KEEPALIVE, default=DEFAULT_KEEPALIVE): vol.All(
+                        vol.Coerce(int), vol.Range(min=15)
+                    ),
+                    vol.Optional(CONF_BROKER): cv.string,
+                    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
+                    vol.Optional(CONF_USERNAME): cv.string,
+                    vol.Optional(CONF_PASSWORD): cv.string,
+                    vol.Optional(CONF_CERTIFICATE): vol.Any("auto", cv.isfile),
+                    vol.Inclusive(
+                        CONF_CLIENT_KEY, "client_key_auth", msg=CLIENT_KEY_AUTH_MSG
+                    ): cv.isfile,
+                    vol.Inclusive(
+                        CONF_CLIENT_CERT, "client_key_auth", msg=CLIENT_KEY_AUTH_MSG
+                    ): cv.isfile,
+                    vol.Optional(CONF_TLS_INSECURE): cv.boolean,
+                    vol.Optional(
+                        CONF_TLS_VERSION, default=DEFAULT_TLS_PROTOCOL
+                    ): vol.Any("auto", "1.0", "1.1", "1.2"),
+                    vol.Optional(CONF_PROTOCOL, default=DEFAULT_PROTOCOL): vol.All(
+                        cv.string, vol.In([PROTOCOL_31, PROTOCOL_311])
+                    ),
+                    vol.Optional(CONF_WILL_MESSAGE): MQTT_WILL_BIRTH_SCHEMA,
+                    vol.Optional(CONF_BIRTH_MESSAGE): MQTT_WILL_BIRTH_SCHEMA,
+                    vol.Optional(CONF_DISCOVERY, default=DEFAULT_DISCOVERY): cv.boolean,
+                    # discovery_prefix must be a valid publish topic because if no
+                    # state topic is specified, it will be created with the given prefix.
+                    vol.Optional(
+                        CONF_DISCOVERY_PREFIX, default=DEFAULT_DISCOVERY_PREFIX
+                    ): valid_publish_topic,
+                }
+            ),
         )
     },
     extra=vol.ALLOW_EXTRA,
@@ -418,23 +415,6 @@ def subscribe(
     return remove
 
 
-async def _async_setup_server(hass: HomeAssistantType, config: ConfigType):
-    """Try to start embedded MQTT broker.
-
-    This method is a coroutine.
-    """
-    conf: ConfigType = config.get(DOMAIN, {})
-
-    success, broker_config = await server.async_start(
-        hass, conf.get(CONF_PASSWORD), conf.get(CONF_EMBEDDED)
-    )
-
-    if not success:
-        return None
-
-    return broker_config
-
-
 async def _async_setup_discovery(
     hass: HomeAssistantType, conf: ConfigType, config_entry
 ) -> bool:
@@ -463,28 +443,6 @@ async def async_setup(hass: HomeAssistantType, config: ConfigType) -> bool:
         return bool(hass.config_entries.async_entries(DOMAIN))
 
     conf = dict(conf)
-
-    if CONF_EMBEDDED in conf or CONF_BROKER not in conf:
-
-        broker_config = await _async_setup_server(hass, config)
-
-        if broker_config is None:
-            _LOGGER.error("Unable to start embedded MQTT broker")
-            return False
-
-        conf.update(
-            {
-                CONF_BROKER: broker_config[0],
-                CONF_PORT: broker_config[1],
-                CONF_USERNAME: broker_config[2],
-                CONF_PASSWORD: broker_config[3],
-                CONF_CERTIFICATE: broker_config[4],
-                CONF_PROTOCOL: broker_config[5],
-                CONF_CLIENT_KEY: None,
-                CONF_CLIENT_CERT: None,
-                CONF_TLS_INSECURE: None,
-            }
-        )
 
     hass.data[DATA_MQTT_CONFIG] = conf
 
@@ -692,21 +650,6 @@ class MQTT:
         elif certificate == "auto":
             certificate = certifi.where()
 
-        # Be able to override versions other than TLSv1.0 under Python3.6
-        conf_tls_version: str = self.conf.get(CONF_TLS_VERSION)
-        if conf_tls_version == "1.2":
-            tls_version = ssl.PROTOCOL_TLSv1_2
-        elif conf_tls_version == "1.1":
-            tls_version = ssl.PROTOCOL_TLSv1_1
-        elif conf_tls_version == "1.0":
-            tls_version = ssl.PROTOCOL_TLSv1
-        else:
-            # Python3.6 supports automatic negotiation of highest TLS version
-            if sys.hexversion >= 0x03060000:
-                tls_version = ssl.PROTOCOL_TLS  # pylint: disable=no-member
-            else:
-                tls_version = ssl.PROTOCOL_TLSv1
-
         client_key = self.conf.get(CONF_CLIENT_KEY)
         client_cert = self.conf.get(CONF_CLIENT_CERT)
         tls_insecure = self.conf.get(CONF_TLS_INSECURE)
@@ -715,7 +658,7 @@ class MQTT:
                 certificate,
                 certfile=client_cert,
                 keyfile=client_key,
-                tls_version=tls_version,
+                tls_version=ssl.PROTOCOL_TLS,
             )
 
             if tls_insecure is not None:
