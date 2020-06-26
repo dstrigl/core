@@ -3,10 +3,9 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components.switch import PLATFORM_SCHEMA
+from homeassistant.components.switch import PLATFORM_SCHEMA, SwitchEntity
 from homeassistant.const import CONF_HOST, DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.entity import ToggleEntity
 
 from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
 from .. import remote_rpi_gpio
@@ -33,24 +32,19 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     ports = config[CONF_PORTS]
 
     devices = []
-    for port_num, port_name in ports.items():
+    for port, name in ports.items():
         try:
-            led = remote_rpi_gpio.setup_output(address, port_num, invert_logic)
+            led = remote_rpi_gpio.setup_output(address, port, invert_logic)
         except (ValueError, IndexError, KeyError, OSError):
-            _LOGGER.exception(
-                "Unexpected error while setting up Remote GPIO output %d @ %s",
-                port_num,
-                address,
-            )
-            continue
-        new_switch = RemoteRPiGPIOSwitch(port_name, led)
+            return
+        new_switch = RemoteRPiGPIOSwitch(name, led)
         devices.append(new_switch)
 
     add_entities(devices)
 
 
-class RemoteRPiGPIOSwitch(ToggleEntity):
-    """Representation of a Remtoe Raspberry Pi GPIO."""
+class RemoteRPiGPIOSwitch(SwitchEntity):
+    """Representation of a Remote Raspberry Pi GPIO."""
 
     def __init__(self, name, led):
         """Initialize the pin."""
@@ -67,6 +61,11 @@ class RemoteRPiGPIOSwitch(ToggleEntity):
     def should_poll(self):
         """No polling needed."""
         return False
+
+    @property
+    def assumed_state(self):
+        """If unable to access real state of the entity."""
+        return True
 
     @property
     def is_on(self):
