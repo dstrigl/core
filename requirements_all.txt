@@ -1106,6 +1106,9 @@ pmsensor==0.4
 # homeassistant.components.pocketcasts
 pocketcasts==0.1
 
+# homeassistant.components.poolsense
+poolsense==0.0.5
+
 # homeassistant.components.reddit
 praw==6.5.1
 
@@ -1481,7 +1484,7 @@ pymsteams==0.1.12
 pymusiccast==0.1.6
 
 # homeassistant.components.myq
-pymyq==2.0.4
+pymyq==2.0.5
 
 # homeassistant.components.mysensors
 pymysensors==0.18.0

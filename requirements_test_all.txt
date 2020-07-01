@@ -496,6 +496,9 @@ plumlightpad==0.0.11
 # homeassistant.components.serial_pm
 pmsensor==0.4
 
+# homeassistant.components.poolsense
+poolsense==0.0.5
+
 # homeassistant.components.reddit
 praw==6.5.1
 
@@ -673,7 +676,7 @@ pymodbus==2.3.0
 pymonoprice==0.3
 
 # homeassistant.components.myq
-pymyq==2.0.4
+pymyq==2.0.5
 
 # homeassistant.components.nut
 pynut2==2.1.2
