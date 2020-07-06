@@ -113,4 +113,3 @@ class RemoteRPiGPIOBinarySensor(BinarySensorEntity):
             _LOGGER.exception(
                 "Error while updating state of Remote GPIO input '%s'", self._name
             )
-            pass
