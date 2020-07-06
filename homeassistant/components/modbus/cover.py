@@ -2,14 +2,16 @@
 import logging
 from typing import Optional
 
+from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
 from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.cover import (
-    DEVICE_CLASS_BLIND,
     ATTR_POSITION,
     ATTR_TILT_POSITION,
+    DEVICE_CLASS_BLIND,
     PLATFORM_SCHEMA,
     SUPPORT_CLOSE,
     SUPPORT_OPEN,
@@ -20,8 +22,6 @@ from homeassistant.components.cover import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.constants import Endian
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
