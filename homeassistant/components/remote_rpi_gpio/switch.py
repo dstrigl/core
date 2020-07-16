@@ -6,6 +6,7 @@ import voluptuous as vol
 from homeassistant.components.switch import PLATFORM_SCHEMA, SwitchEntity
 from homeassistant.const import CONF_HOST, DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.entity import ToggleEntity
 
 from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
 from .. import remote_rpi_gpio
@@ -43,7 +44,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices)
 
 
-class RemoteRPiGPIOSwitch(SwitchEntity):
+class RemoteRPiGPIOSwitch(ToggleEntity):
     """Representation of a Remote Raspberry Pi GPIO."""
 
     def __init__(self, name, led):
