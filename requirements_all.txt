@@ -724,7 +724,7 @@ hole==0.5.1
 holidays==0.10.2
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200715.1
+home-assistant-frontend==20200716.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -1445,6 +1445,9 @@ pylutron==0.2.5
 # homeassistant.components.mailgun
 pymailgunner==1.4
 
+# homeassistant.components.firmata
+pymata-express==1.13
+
 # homeassistant.components.mediaroom
 pymediaroom==0.6.4
 
@@ -1623,7 +1626,7 @@ pysnmp==4.4.12
 pysoma==0.0.10
 
 # homeassistant.components.sonos
-pysonos==0.0.31
+pysonos==0.0.32
 
 # homeassistant.components.spc
 pyspcwebgw==0.4.0
@@ -2269,7 +2272,7 @@ zigpy-xbee==0.12.1
 zigpy-zigate==0.6.1
 
 # homeassistant.components.zha
-zigpy==0.22.1
+zigpy==0.22.2
 
 # homeassistant.components.zoneminder
 zm-py==0.4.0
