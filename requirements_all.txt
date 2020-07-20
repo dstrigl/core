@@ -1167,6 +1167,9 @@ py17track==2.2.2
 # homeassistant.components.hdmi_cec
 pyCEC==0.4.13
 
+# homeassistant.components.control4
+pyControl4==0.0.6
+
 # homeassistant.components.tplink
 pyHS100==0.3.5.1
 
@@ -1512,7 +1515,7 @@ pynx584==0.5
 pynzbgetapi==0.2.0
 
 # homeassistant.components.obihai
-pyobihai==1.2.1
+pyobihai==1.2.3
 
 # homeassistant.components.ombi
 pyombi==0.1.10
