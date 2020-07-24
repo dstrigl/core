@@ -234,7 +234,7 @@ ambiclimate==0.2.1
 amcrest==1.7.0
 
 # homeassistant.components.androidtv
-androidtv[async]==0.0.45
+androidtv[async]==0.0.46
 
 # homeassistant.components.anel_pwrctrl
 anel_pwrctrl-homeassistant==0.0.1.dev2
@@ -356,7 +356,7 @@ blockchain==1.4.4
 bomradarloop==0.1.4
 
 # homeassistant.components.bond
-bond-api==0.1.4
+bond-api==0.1.7
 
 # homeassistant.components.amazon_polly
 # homeassistant.components.route53
@@ -1951,7 +1951,7 @@ simplehound==0.3
 simplepush==1.1.4
 
 # homeassistant.components.simplisafe
-simplisafe-python==9.2.0
+simplisafe-python==9.2.1
 
 # homeassistant.components.sisyphus
 sisyphus-control==2.2.1
