@@ -1,7 +1,7 @@
 {
   "domain": "htrest",
   "name": "HtREST",
-  "documentation": "",
+  "documentation": "https://github.com/dstrigl",
   "requirements": [],
   "dependencies": ["sensor"],
   "codeowners": ["@dstrigl"]
