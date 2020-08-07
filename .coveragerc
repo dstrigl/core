@@ -170,7 +170,10 @@ omit =
     homeassistant/components/devolo_home_control/__init__.py
     homeassistant/components/devolo_home_control/binary_sensor.py
     homeassistant/components/devolo_home_control/const.py
+    homeassistant/components/devolo_home_control/cover.py
     homeassistant/components/devolo_home_control/devolo_device.py
+    homeassistant/components/devolo_home_control/devolo_multi_level_switch.py
+    homeassistant/components/devolo_home_control/light.py
     homeassistant/components/devolo_home_control/sensor.py
     homeassistant/components/devolo_home_control/subscriber.py
     homeassistant/components/devolo_home_control/switch.py
@@ -458,8 +461,6 @@ omit =
     homeassistant/components/lightwave/*
     homeassistant/components/limitlessled/light.py
     homeassistant/components/linksys_smart/device_tracker.py
-    homeassistant/components/linky/__init__.py
-    homeassistant/components/linky/sensor.py
     homeassistant/components/linode/*
     homeassistant/components/linux_battery/sensor.py
     homeassistant/components/lirc/*
@@ -552,6 +553,10 @@ omit =
     homeassistant/components/netatmo/camera.py
     homeassistant/components/netatmo/climate.py
     homeassistant/components/netatmo/const.py
+    homeassistant/components/netatmo/data_handler.py
+    homeassistant/components/netatmo/helper.py
+    homeassistant/components/netatmo/light.py
+    homeassistant/components/netatmo/netatmo_entity_base.py
     homeassistant/components/netatmo/sensor.py
     homeassistant/components/netatmo/webhook.py
     homeassistant/components/netdata/sensor.py
@@ -620,6 +625,9 @@ omit =
     homeassistant/components/orvibo/switch.py
     homeassistant/components/osramlightify/light.py
     homeassistant/components/otp/sensor.py
+    homeassistant/components/ovo_energy/__init__.py
+    homeassistant/components/ovo_energy/const.py
+    homeassistant/components/ovo_energy/sensor.py
     homeassistant/components/panasonic_bluray/media_player.py
     homeassistant/components/panasonic_viera/media_player.py
     homeassistant/components/pandora/media_player.py
@@ -632,6 +640,7 @@ omit =
     homeassistant/components/picotts/tts.py
     homeassistant/components/piglow/light.py
     homeassistant/components/pilight/*
+    homeassistant/components/ping/const.py
     homeassistant/components/ping/binary_sensor.py
     homeassistant/components/ping/device_tracker.py
     homeassistant/components/pioneer/media_player.py
