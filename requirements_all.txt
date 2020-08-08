@@ -1876,7 +1876,7 @@ raspyrfm-client==1.2.8
 recollect-waste==1.0.1
 
 # homeassistant.components.rainmachine
-regenmaschine==1.5.1
+regenmaschine==2.1.0
 
 # homeassistant.components.python_script
 restrictedpython==5.0
@@ -2107,7 +2107,7 @@ temperusb==1.5.3
 tesla-powerwall==0.2.12
 
 # homeassistant.components.tesla
-teslajsonpy==0.10.1
+teslajsonpy==0.10.4
 
 # homeassistant.components.tensorflow
 # tf-models-official==2.2.1
