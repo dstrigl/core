@@ -199,7 +199,7 @@ bond-api==0.1.8
 bravia-tv==1.0.6
 
 # homeassistant.components.broadlink
-broadlink==0.14.0
+broadlink==0.14.1
 
 # homeassistant.components.brother
 brother==0.1.14
@@ -368,7 +368,7 @@ hole==0.5.1
 holidays==0.10.3
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200811.0
+home-assistant-frontend==20200820.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -682,6 +682,9 @@ pyisy==2.0.2
 
 # homeassistant.components.kira
 pykira==0.1.1
+
+# homeassistant.components.kodi
+pykodi==0.1
 
 # homeassistant.components.lastfm
 pylast==3.2.1
