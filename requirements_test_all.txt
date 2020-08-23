@@ -190,7 +190,7 @@ blebox_uniapi==1.3.2
 blinkpy==0.16.3
 
 # homeassistant.components.bom
-bomradarloop==0.1.4
+bomradarloop==0.1.5
 
 # homeassistant.components.bond
 bond-api==0.1.8
@@ -217,7 +217,7 @@ caldav==0.6.1
 coinmarketcap==5.0.3
 
 # homeassistant.scripts.check_config
-colorlog==4.1.0
+colorlog==4.2.1
 
 # homeassistant.components.eddystone_temperature
 # homeassistant.components.eq3btsmart
@@ -442,7 +442,7 @@ millheater==0.3.4
 minio==4.0.9
 
 # homeassistant.components.tts
-mutagen==1.44.0
+mutagen==1.45.1
 
 # homeassistant.components.ness_alarm
 nessclient==0.9.15
