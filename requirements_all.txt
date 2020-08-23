@@ -328,7 +328,7 @@ batinfo==0.4.2
 # beacontools[scan]==1.2.3
 
 # homeassistant.components.scrape
-beautifulsoup4==4.9.0
+beautifulsoup4==4.9.1
 
 # homeassistant.components.beewi_smartclim
 beewi_smartclim==0.0.7
@@ -435,7 +435,7 @@ colorlog==4.1.0
 concord232==0.15
 
 # homeassistant.components.upc_connect
-connect-box==0.2.5
+connect-box==0.2.7
 
 # homeassistant.components.eddystone_temperature
 # homeassistant.components.eq3btsmart
@@ -1087,7 +1087,7 @@ pillow==7.2.0
 pizzapi==0.0.3
 
 # homeassistant.components.plex
-plexapi==4.0.0
+plexapi==4.1.0
 
 # homeassistant.components.plex
 plexauth==0.0.5
@@ -1109,7 +1109,7 @@ pocketcasts==0.1
 poolsense==0.0.8
 
 # homeassistant.components.reddit
-praw==6.5.1
+praw==7.1.0
 
 # homeassistant.components.islamic_prayer_times
 prayer_times_calculator==0.0.3
@@ -1127,7 +1127,7 @@ protobuf==3.12.2
 proxmoxer==1.1.1
 
 # homeassistant.components.systemmonitor
-psutil==5.7.0
+psutil==5.7.2
 
 # homeassistant.components.ptvsd
 ptvsd==4.3.2
@@ -1438,7 +1438,7 @@ pykwb==0.0.8
 pylacrosse==0.4.0
 
 # homeassistant.components.lastfm
-pylast==3.2.1
+pylast==3.3.0
 
 # homeassistant.components.launch_library
 pylaunches==0.2.0
@@ -1591,6 +1591,9 @@ pyrecswitch==1.0.2
 
 # homeassistant.components.repetier
 pyrepetier==3.0.5
+
+# homeassistant.components.risco
+pyrisco==0.2.1
 
 # homeassistant.components.sabnzbd
 pysabnzbd==1.1.0
@@ -1780,7 +1783,7 @@ python-velbus==2.0.44
 python-vlc==1.1.2
 
 # homeassistant.components.whois
-python-whois==0.7.2
+python-whois==0.7.3
 
 # homeassistant.components.wink
 python-wink==1.10.5
@@ -1949,7 +1952,7 @@ schiene==0.23
 scsgate==0.1.0
 
 # homeassistant.components.sendgrid
-sendgrid==6.2.1
+sendgrid==6.4.6
 
 # homeassistant.components.sensehat
 sense-hat==2.2.0
@@ -1988,7 +1991,7 @@ slackclient==2.5.0
 sleepyq==0.7
 
 # homeassistant.components.xmpp
-slixmpp==1.5.1
+slixmpp==1.5.2
 
 # homeassistant.components.smart_meter_texas
 smart-meter-texas==0.4.0
@@ -2048,7 +2051,7 @@ spotipy==2.12.0
 
 # homeassistant.components.recorder
 # homeassistant.components.sql
-sqlalchemy==1.3.18
+sqlalchemy==1.3.19
 
 # homeassistant.components.starline
 starline==0.1.3
@@ -2196,7 +2199,7 @@ venstarcolortouch==0.12
 vilfo-api-client==0.3.2
 
 # homeassistant.components.volkszaehler
-volkszaehler==0.1.2
+volkszaehler==0.1.3
 
 # homeassistant.components.volvooncall
 volvooncall==0.8.12
