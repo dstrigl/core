@@ -384,7 +384,7 @@ bravia-tv==1.0.6
 broadlink==0.14.1
 
 # homeassistant.components.brother
-brother==0.1.14
+brother==0.1.15
 
 # homeassistant.components.brottsplatskartan
 brottsplatskartan==0.0.1
@@ -1045,7 +1045,7 @@ paho-mqtt==1.5.0
 panacotta==0.1
 
 # homeassistant.components.panasonic_viera
-panasonic_viera==0.3.5
+panasonic_viera==0.3.6
 
 # homeassistant.components.pcal9535a
 pcal9535a==0.7
@@ -1333,9 +1333,6 @@ pyephember==0.3.1
 
 # homeassistant.components.everlights
 pyeverlights==0.1.0
-
-# homeassistant.components.ezviz
-pyezviz==0.1.5
 
 # homeassistant.components.fido
 pyfido==2.1.1
