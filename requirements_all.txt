@@ -179,7 +179,7 @@ aioguardian==1.0.1
 aioharmony==0.2.6
 
 # homeassistant.components.homekit_controller
-aiohomekit[IP]==0.2.47
+aiohomekit[IP]==0.2.49
 
 # homeassistant.components.emulated_hue
 # homeassistant.components.http
@@ -1633,7 +1633,7 @@ pyskyqhub==0.1.1
 pysma==0.3.5
 
 # homeassistant.components.smappee
-pysmappee==0.2.9
+pysmappee==0.2.10
 
 # homeassistant.components.smartthings
 pysmartapp==0.3.2
@@ -2268,7 +2268,6 @@ xknx==0.11.3
 # homeassistant.components.rest
 # homeassistant.components.startca
 # homeassistant.components.ted5000
-# homeassistant.components.yr
 # homeassistant.components.zestimate
 xmltodict==0.12.0
 
