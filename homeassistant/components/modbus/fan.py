@@ -112,10 +112,10 @@ class ModbusFan(FanEntity):
             return
         self._available = True
 
-    def turn_on(self, **kwargs):
+    def turn_on(self, speed: str = None, **kwargs) -> None:
         """Turn on the fan."""
-        if self.supported_features & SUPPORT_SET_SPEED and ATTR_SPEED in kwargs:
-            self.set_speed(str(kwargs[ATTR_SPEED]))
+        if speed is not None:
+            self.set_speed(speed)
             if not self._available:
                 return
         self._write_coil(self._state_coil, True)
