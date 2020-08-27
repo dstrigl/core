@@ -9,7 +9,6 @@ from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.fan import (
-    ATTR_SPEED,
     PLATFORM_SCHEMA,
     SPEED_HIGH,
     SPEED_LOW,
