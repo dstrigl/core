@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.1.2
+aioshelly==0.2.1
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.0
@@ -1460,7 +1460,7 @@ pymailgunner==1.4
 pymata-express==1.13
 
 # homeassistant.components.mediaroom
-pymediaroom==0.6.4
+pymediaroom==0.6.4.1
 
 # homeassistant.components.melcloud
 pymelcloud==2.5.2
