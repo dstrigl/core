@@ -757,7 +757,7 @@ pyps4-2ndscreen==1.1.1
 pyqwikswitch==0.93
 
 # homeassistant.components.risco
-pyrisco==0.2.1
+pyrisco==0.2.3
 
 # homeassistant.components.acer_projector
 # homeassistant.components.zha
@@ -872,7 +872,7 @@ regenmaschine==2.1.0
 restrictedpython==5.0
 
 # homeassistant.components.rflink
-rflink==0.0.52
+rflink==0.0.54
 
 # homeassistant.components.ring
 ring_doorbell==0.6.0
@@ -1037,7 +1037,7 @@ xmltodict==0.12.0
 yeelight==0.5.2
 
 # homeassistant.components.zeroconf
-zeroconf==0.28.1
+zeroconf==0.28.2
 
 # homeassistant.components.zha
 zha-quirks==0.0.43
