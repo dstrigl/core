@@ -1,6 +1,9 @@
 """Support for Modbus lights."""
 import logging
 
+from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
+from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.light import (
@@ -11,9 +14,6 @@ from homeassistant.components.light import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
-from pymodbus.exceptions import ConnectionException, ModbusException
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ExceptionResponse
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 

@@ -2,6 +2,10 @@
 import logging
 from typing import Optional
 
+from pymodbus.constants import Endian
+from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
+from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.fan import (
@@ -14,10 +18,6 @@ from homeassistant.components.fan import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE, STATE_OFF, STATE_ON
 from homeassistant.helpers import config_validation as cv
-from pymodbus.constants import Endian
-from pymodbus.exceptions import ConnectionException, ModbusException
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ExceptionResponse
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
