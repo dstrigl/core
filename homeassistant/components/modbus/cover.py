@@ -217,7 +217,7 @@ class ModbusCover(CoverEntity):
         dec = BinaryPayloadDecoder.fromRegisters(
             result.registers, byteorder=Endian.Little
         )
-        self._status = dec.decode_16bit_uint() & 0xff
-        self._cover_position = scale_to_100(dec.decode_16bit_uint() & 0xff)
-        self._cover_tilt_position = scale_to_100(dec.decode_16bit_uint() & 0xff)
+        self._status = dec.decode_16bit_uint() & 0xFF
+        self._cover_position = scale_to_100(dec.decode_16bit_uint() & 0xFF)
+        self._cover_tilt_position = scale_to_100(dec.decode_16bit_uint() & 0xFF)
         self._available = True
