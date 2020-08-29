@@ -11,7 +11,6 @@ from homeassistant.components.light import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
-from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException, ModbusException
 from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
 from pymodbus.pdu import ExceptionResponse
