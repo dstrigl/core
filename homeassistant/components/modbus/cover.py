@@ -2,10 +2,6 @@
 import logging
 from typing import Optional
 
-from pymodbus.constants import Endian
-from pymodbus.exceptions import ConnectionException, ModbusException
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.cover import (
@@ -22,23 +18,25 @@ from homeassistant.components.cover import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
+from pymodbus.constants import Endian
+from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
+from pymodbus.pdu import ExceptionResponse
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-# OSCAT status values
+CONF_CURRENT_STATUS_ADDR = "current_status_addr"
+CONF_REQUEST_STATUS_ADDR = "request_status_addr"
+
+# OSCAT status values (BYTE)
 STATUS_OPENING = 121
 STATUS_CLOSING = 122
 STATUS_STANDBY = 131
 STATUS_OPEN = 134
 STATUS_CLOSE = 135
 STATUS_SET = 136
-
-CONF_CURRENT_STATUS_ADDR = "current_status_addr"
-CONF_REQUEST_STATUS_ADDR = "request_status_addr"
-
-BYTEORDER = Endian.Little
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -165,26 +163,26 @@ class ModbusCover(CoverEntity):
 
     def open_cover(self, **kwargs):
         """Open the cover."""
-        builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
-        builder.add_16bit_uint(STATUS_OPEN)
+        builder = BinaryPayloadBuilder()
+        builder.add_8bit_uint(STATUS_OPEN)
         self._write_registers(self._request_status_addr, builder.to_registers())
 
     def close_cover(self, **kwargs):
         """Close cover."""
-        builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
-        builder.add_16bit_uint(STATUS_CLOSE)
+        builder = BinaryPayloadBuilder()
+        builder.add_8bit_uint(STATUS_CLOSE)
         self._write_registers(self._request_status_addr, builder.to_registers())
 
     def stop_cover(self, **kwargs):
         """Stop the cover."""
-        builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
-        builder.add_16bit_uint(STATUS_STANDBY)
+        builder = BinaryPayloadBuilder()
+        builder.add_8bit_uint(STATUS_STANDBY)
         self._write_registers(self._request_status_addr, builder.to_registers())
 
     def _set_position_and_angle(self, position, angle) -> None:
         position = int(scale_to_255(position))
         angle = int(scale_to_255(angle))
-        builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
+        builder = BinaryPayloadBuilder(byteorder=Endian.Little)
         builder.add_16bit_uint(STATUS_SET)
         builder.add_16bit_uint(position)
         builder.add_16bit_uint(angle)
@@ -216,8 +214,10 @@ class ModbusCover(CoverEntity):
         if isinstance(result, (ModbusException, ExceptionResponse)):
             self._available = False
             return
-        dec = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=BYTEORDER)
-        self._status = dec.decode_16bit_uint()
-        self._cover_position = scale_to_100(dec.decode_16bit_uint())
-        self._cover_tilt_position = scale_to_100(dec.decode_16bit_uint())
+        dec = BinaryPayloadDecoder.fromRegisters(
+            result.registers, byteorder=Endian.Little
+        )
+        self._status = dec.decode_16bit_uint() & 0xff
+        self._cover_position = scale_to_100(dec.decode_16bit_uint() & 0xff)
+        self._cover_tilt_position = scale_to_100(dec.decode_16bit_uint() & 0xff)
         self._available = True

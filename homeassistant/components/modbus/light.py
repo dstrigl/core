@@ -1,10 +1,6 @@
 """Support for Modbus lights."""
 import logging
 
-from pymodbus.constants import Endian
-from pymodbus.exceptions import ConnectionException, ModbusException
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.light import (
@@ -15,6 +11,10 @@ from homeassistant.components.light import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE
 from homeassistant.helpers import config_validation as cv
+from pymodbus.constants import Endian
+from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
+from pymodbus.pdu import ExceptionResponse
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
@@ -24,7 +24,6 @@ CONF_STATE_COIL = "state_coil"
 CONF_BRIGHTNESS_REGISTER = "brightness_register"
 
 DEFAULT_BRIGHTNESS = 255
-BYTEORDER = Endian.Little
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -107,8 +106,8 @@ class ModbusLight(LightEntity):
         if self.supported_features & SUPPORT_BRIGHTNESS and ATTR_BRIGHTNESS in kwargs:
             brightness = int(kwargs[ATTR_BRIGHTNESS])
             brightness = max(0, min(255, brightness))
-            builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
-            builder.add_16bit_uint(brightness)
+            builder = BinaryPayloadBuilder()
+            builder.add_8bit_uint(brightness)
             try:
                 self._hub.write_registers(
                     self._slave, self._brightness_register, builder.to_registers()
@@ -136,10 +135,8 @@ class ModbusLight(LightEntity):
             if isinstance(result, (ModbusException, ExceptionResponse)):
                 self._available = False
                 return
-            dec = BinaryPayloadDecoder.fromRegisters(
-                result.registers, byteorder=BYTEORDER
-            )
-            brightness = dec.decode_16bit_uint()
+            dec = BinaryPayloadDecoder.fromRegisters(result.registers)
+            brightness = dec.decode_8bit_uint()
         try:
             result = self._hub.read_coils(self._slave, self._state_coil, 1)
         except ConnectionException:

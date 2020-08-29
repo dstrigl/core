@@ -2,10 +2,6 @@
 import logging
 from typing import Optional
 
-from pymodbus.constants import Endian
-from pymodbus.exceptions import ConnectionException, ModbusException
-from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ExceptionResponse
 import voluptuous as vol
 
 from homeassistant.components.fan import (
@@ -18,6 +14,10 @@ from homeassistant.components.fan import (
 )
 from homeassistant.const import CONF_NAME, CONF_SLAVE, STATE_OFF, STATE_ON
 from homeassistant.helpers import config_validation as cv
+from pymodbus.constants import Endian
+from pymodbus.exceptions import ConnectionException, ModbusException
+from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
+from pymodbus.pdu import ExceptionResponse
 
 from .const import CONF_HUB, DEFAULT_HUB, MODBUS_DOMAIN
 
@@ -28,7 +28,6 @@ CONF_SPEED_REGISTER = "speed_register"
 
 SPEED_TO_VALUE = {SPEED_LOW: 0, SPEED_MEDIUM: 1, SPEED_HIGH: 2}
 VALUE_TO_SPEED = {0: SPEED_LOW, 1: SPEED_MEDIUM, 2: SPEED_HIGH}
-BYTEORDER = Endian.Little
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -126,7 +125,7 @@ class ModbusFan(FanEntity):
     def set_speed(self, speed: str) -> None:
         """Set the speed of the fan."""
         if speed in SPEED_TO_VALUE:
-            builder = BinaryPayloadBuilder(byteorder=BYTEORDER)
+            builder = BinaryPayloadBuilder(byteorder=Endian.Big)
             builder.add_16bit_int(SPEED_TO_VALUE[speed])
             try:
                 self._hub.write_registers(
@@ -150,7 +149,7 @@ class ModbusFan(FanEntity):
                 self._available = False
                 return
             dec = BinaryPayloadDecoder.fromRegisters(
-                result.registers, byteorder=BYTEORDER
+                result.registers, byteorder=Endian.Big
             )
             speed = dec.decode_16bit_int()
         try:
