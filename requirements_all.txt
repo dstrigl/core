@@ -752,7 +752,7 @@ homeassistant-pyozw==0.1.10
 homeconnect==0.5
 
 # homeassistant.components.homematicip_cloud
-homematicip==0.10.19
+homematicip==0.11.0
 
 # homeassistant.components.horizon
 horimote==0.4.1
@@ -1424,7 +1424,7 @@ pyitachip2ir==0.0.7
 pykira==0.1.1
 
 # homeassistant.components.kodi
-pykodi==0.1
+pykodi==0.1.1
 
 # homeassistant.components.kwb
 pykwb==0.0.8
@@ -1588,7 +1588,7 @@ pyrecswitch==1.0.2
 pyrepetier==3.0.5
 
 # homeassistant.components.risco
-pyrisco==0.2.3
+pyrisco==0.2.4
 
 # homeassistant.components.sabnzbd
 pysabnzbd==1.1.0
@@ -1836,7 +1836,7 @@ pyvizio==0.1.51
 pyvlx==0.2.16
 
 # homeassistant.components.volumio
-pyvolumio==0.1.1
+pyvolumio==0.1.2
 
 # homeassistant.components.html5
 pywebpush==1.9.2
@@ -2285,7 +2285,7 @@ youtube_dl==2020.07.28
 zengge==0.2
 
 # homeassistant.components.zeroconf
-zeroconf==0.28.2
+zeroconf==0.28.3
 
 # homeassistant.components.zha
 zha-quirks==0.0.43

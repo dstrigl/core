@@ -379,7 +379,7 @@ homeassistant-pyozw==0.1.10
 homeconnect==0.5
 
 # homeassistant.components.homematicip_cloud
-homematicip==0.10.19
+homematicip==0.11.0
 
 # homeassistant.components.google
 # homeassistant.components.remember_the_milk
@@ -692,7 +692,7 @@ pyisy==2.0.2
 pykira==0.1.1
 
 # homeassistant.components.kodi
-pykodi==0.1
+pykodi==0.1.1
 
 # homeassistant.components.lastfm
 pylast==3.3.0
@@ -766,7 +766,7 @@ pyps4-2ndscreen==1.1.1
 pyqwikswitch==0.93
 
 # homeassistant.components.risco
-pyrisco==0.2.3
+pyrisco==0.2.4
 
 # homeassistant.components.acer_projector
 # homeassistant.components.zha
@@ -860,7 +860,7 @@ pyvesync==1.1.0
 pyvizio==0.1.51
 
 # homeassistant.components.volumio
-pyvolumio==0.1.1
+pyvolumio==0.1.2
 
 # homeassistant.components.html5
 pywebpush==1.9.2
@@ -1049,7 +1049,7 @@ xmltodict==0.12.0
 yeelight==0.5.2
 
 # homeassistant.components.zeroconf
-zeroconf==0.28.2
+zeroconf==0.28.3
 
 # homeassistant.components.zha
 zha-quirks==0.0.43
