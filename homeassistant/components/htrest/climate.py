@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import socket
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 import async_timeout
@@ -35,6 +35,7 @@ from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import async_track_state_change
+from homeassistant.util import slugify
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -134,6 +135,7 @@ class HtRestThermostat(ClimateEntity):
         self._target_temp = None
         self._current_temp = None
         self._current_hvac_action = None
+        self._attributes = None
         self._available = True
 
     async def async_added_to_hass(self) -> None:
@@ -174,6 +176,15 @@ class HtRestThermostat(ClimateEntity):
             self._current_temp = float(state.state)
         except ValueError as ex:
             _LOGGER.exception("Unable to update from sensor: %s", ex)
+
+    @property
+    def device_state_attributes(self) -> Optional[Dict[str, Any]]:
+        """Return device specific state attributes.
+
+        Implemented by platform classes. Convention for attribute names
+        is lowercase snake_case.
+        """
+        return self._attributes
 
     @property
     def name(self) -> str:
@@ -302,18 +313,10 @@ class HtRestThermostat(ClimateEntity):
         try:
             websession = async_get_clientsession(self.hass)
             with async_timeout.timeout(self._timeout):
-                params = (
-                    PARAM_HKR_SOLL_RAUM,
-                    PARAM_STOERUNG,
-                    PARAM_HAUPTSCHALTER,
-                    PARAM_VERDICHTER_STATUS,
-                    PARAM_VERDICHTERANFORDERUNG,
-                )
                 response = await websession.get(
                     url,
                     auth=self._auth,
                     headers={"Accept": "application/json"},
-                    params={param: "" for param in params},
                 )
                 response.raise_for_status()
         except asyncio.TimeoutError:
@@ -338,6 +341,7 @@ class HtRestThermostat(ClimateEntity):
 
         try:
             data = await response.json()
+            self._attributes = {slugify(k): v for k, v in data.items()}
             hkr_soll_raum = float(data[PARAM_HKR_SOLL_RAUM])
             stoerung = bool(data[PARAM_STOERUNG])
             hauptschalter = bool(data[PARAM_HAUPTSCHALTER])
