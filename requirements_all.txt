@@ -263,7 +263,7 @@ apcaccess==0.0.13
 apns2==0.3.0
 
 # homeassistant.components.apprise
-apprise==0.8.7
+apprise==0.8.8
 
 # homeassistant.components.aprs
 aprslib==0.6.46
@@ -1959,7 +1959,7 @@ sense-hat==2.2.0
 sense_energy==0.7.2
 
 # homeassistant.components.sentry
-sentry-sdk==0.17.1
+sentry-sdk==0.17.3
 
 # homeassistant.components.sharkiq
 sharkiqpy==0.1.8
