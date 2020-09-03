@@ -9,8 +9,6 @@ from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.reload import setup_reload_service
 
-from . import DOMAIN, PLATFORMS
-
 from . import (
     CONF_BOUNCETIME,
     CONF_INVERT_LOGIC,
@@ -18,6 +16,8 @@ from . import (
     DEFAULT_BOUNCETIME,
     DEFAULT_INVERT_LOGIC,
     DEFAULT_PULL_MODE,
+    DOMAIN,
+    PLATFORMS,
     PULL_MODES,
 )
 

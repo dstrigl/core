@@ -9,9 +9,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import ToggleEntity
 from homeassistant.helpers.reload import setup_reload_service
 
-from . import DOMAIN, PLATFORMS
-
-from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
+from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC, DOMAIN, PLATFORMS
 from .. import rpi_gpio
 
 _LOGGER = logging.getLogger(__name__)

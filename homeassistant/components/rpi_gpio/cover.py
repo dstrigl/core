@@ -10,9 +10,7 @@ from homeassistant.const import CONF_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.reload import setup_reload_service
 
-from . import DOMAIN, PLATFORMS
-
-from . import DEFAULT_PULL_MODE, PULL_MODES
+from . import DEFAULT_PULL_MODE, DOMAIN, PLATFORMS, PULL_MODES
 
 _LOGGER = logging.getLogger(__name__)
 
