@@ -7,6 +7,9 @@ from homeassistant.components import rpi_gpio
 from homeassistant.components.binary_sensor import PLATFORM_SCHEMA, BinarySensorEntity
 from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.reload import setup_reload_service
+
+from . import DOMAIN, PLATFORMS
 
 from . import (
     CONF_BOUNCETIME,
@@ -36,9 +39,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Raspberry PI GPIO devices."""
-    pull_mode = config[CONF_PULL_MODE]
-    bouncetime = config[CONF_BOUNCETIME]
-    invert_logic = config[CONF_INVERT_LOGIC]
+
+    setup_reload_service(hass, DOMAIN, PLATFORMS)
+
+    pull_mode = config.get(CONF_PULL_MODE)
+    bouncetime = config.get(CONF_BOUNCETIME)
+    invert_logic = config.get(CONF_INVERT_LOGIC)
 
     binary_sensors = []
     ports = config["ports"]

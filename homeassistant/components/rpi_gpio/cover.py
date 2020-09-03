@@ -8,6 +8,9 @@ from homeassistant.components import rpi_gpio
 from homeassistant.components.cover import PLATFORM_SCHEMA, CoverEntity
 from homeassistant.const import CONF_NAME
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.reload import setup_reload_service
+
+from . import DOMAIN, PLATFORMS
 
 from . import DEFAULT_PULL_MODE, PULL_MODES
 
@@ -53,10 +56,14 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the RPi cover platform."""
-    relay_time = config[CONF_RELAY_TIME]
-    state_pull_mode = config[CONF_STATE_PULL_MODE]
-    invert_state = config[CONF_INVERT_STATE]
-    invert_relay = config[CONF_INVERT_RELAY]
+
+    setup_reload_service(hass, DOMAIN, PLATFORMS)
+
+    relay_time = config.get(CONF_RELAY_TIME)
+    state_pull_mode = config.get(CONF_STATE_PULL_MODE)
+    invert_state = config.get(CONF_INVERT_STATE)
+    invert_relay = config.get(CONF_INVERT_RELAY)
+
     covers = []
     covers_conf = config[CONF_COVERS]
 

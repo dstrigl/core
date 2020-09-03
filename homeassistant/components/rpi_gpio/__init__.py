@@ -20,6 +20,7 @@ DEFAULT_PULL_MODE = CONF_PULL_MODE_UP
 PULL_MODES = [CONF_PULL_MODE_UP, CONF_PULL_MODE_DOWN] + CONF_PULL_MODE_OFF
 
 DOMAIN = "rpi_gpio"
+PLATFORMS = ["binary_sensor", "cover", "switch"]
 
 
 def setup(hass, config):

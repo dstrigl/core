@@ -7,6 +7,9 @@ from homeassistant.components.switch import PLATFORM_SCHEMA
 from homeassistant.const import DEVICE_DEFAULT_NAME
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import ToggleEntity
+from homeassistant.helpers.reload import setup_reload_service
+
+from . import DOMAIN, PLATFORMS
 
 from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
 from .. import rpi_gpio
@@ -27,7 +30,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Raspberry PI GPIO devices."""
-    invert_logic = config[CONF_INVERT_LOGIC]
+
+    setup_reload_service(hass, DOMAIN, PLATFORMS)
+
+    invert_logic = config.get(CONF_INVERT_LOGIC)
 
     switches = []
     ports = config[CONF_PORTS]
