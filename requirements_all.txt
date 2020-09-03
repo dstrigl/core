@@ -224,7 +224,7 @@ aiopylgtv==0.3.3
 aioshelly==0.2.1
 
 # homeassistant.components.switcher_kis
-aioswitcher==1.2.0
+aioswitcher==1.2.1
 
 # homeassistant.components.unifi
 aiounifi==23
@@ -286,6 +286,9 @@ asterisk_mbox==0.5.0
 # homeassistant.components.dlna_dmr
 # homeassistant.components.upnp
 async-upnp-client==0.14.13
+
+# homeassistant.components.supla
+asyncpysupla==0.0.5
 
 # homeassistant.components.aten_pe
 atenpdu==0.3.0
@@ -1659,9 +1662,6 @@ pystiebeleltron==0.0.1.dev2
 
 # homeassistant.components.suez_water
 pysuez==0.1.19
-
-# homeassistant.components.supla
-pysupla==0.0.3
 
 # homeassistant.components.syncthru
 pysyncthru==0.7.0
