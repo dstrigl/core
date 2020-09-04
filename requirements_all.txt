@@ -958,7 +958,7 @@ netdisco==2.8.2
 neurio==0.3.1
 
 # homeassistant.components.nexia
-nexia==0.9.3
+nexia==0.9.4
 
 # homeassistant.components.nextcloud
 nextcloudmonitor==1.1.0
@@ -1649,7 +1649,7 @@ pysnmp==4.4.12
 pysoma==0.0.10
 
 # homeassistant.components.sonos
-pysonos==0.0.32
+pysonos==0.0.33
 
 # homeassistant.components.spc
 pyspcwebgw==0.4.0
