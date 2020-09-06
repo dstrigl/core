@@ -272,7 +272,7 @@ aprslib==0.6.46
 aqualogic==1.0
 
 # homeassistant.components.arcam_fmj
-arcam-fmj==0.5.2
+arcam-fmj==0.5.3
 
 # homeassistant.components.arris_tg2492lg
 arris-tg2492lg==1.0.0
@@ -668,7 +668,7 @@ glances_api==0.2.0
 gntp==1.0.3
 
 # homeassistant.components.gogogate2
-gogogate2-api==1.0.4
+gogogate2-api==2.0.0
 
 # homeassistant.components.google
 google-api-python-client==1.6.4
@@ -1805,7 +1805,7 @@ pytraccar==0.9.0
 pytrackr==0.0.5
 
 # homeassistant.components.tradfri
-pytradfri[async]==7.0.0
+pytradfri[async]==7.0.1
 
 # homeassistant.components.trafikverket_train
 # homeassistant.components.trafikverket_weatherstation
@@ -1955,8 +1955,9 @@ sendgrid==6.4.6
 # homeassistant.components.sensehat
 sense-hat==2.2.0
 
+# homeassistant.components.emulated_kasa
 # homeassistant.components.sense
-sense_energy==0.7.2
+sense_energy==0.8.0
 
 # homeassistant.components.sentry
 sentry-sdk==0.17.3

@@ -161,7 +161,7 @@ apprise==0.8.8
 aprslib==0.6.46
 
 # homeassistant.components.arcam_fmj
-arcam-fmj==0.5.2
+arcam-fmj==0.5.3
 
 # homeassistant.components.dlna_dmr
 # homeassistant.components.upnp
@@ -334,7 +334,7 @@ gios==0.1.4
 glances_api==0.2.0
 
 # homeassistant.components.gogogate2
-gogogate2-api==1.0.4
+gogogate2-api==2.0.0
 
 # homeassistant.components.google
 google-api-python-client==1.6.4
@@ -851,7 +851,7 @@ pytile==4.0.0
 pytraccar==0.9.0
 
 # homeassistant.components.tradfri
-pytradfri[async]==7.0.0
+pytradfri[async]==7.0.1
 
 # homeassistant.components.vera
 pyvera==0.3.9
@@ -907,8 +907,9 @@ samsungctl[websocket]==0.7.1
 # homeassistant.components.samsungtv
 samsungtvws[websocket]==1.4.0
 
+# homeassistant.components.emulated_kasa
 # homeassistant.components.sense
-sense_energy==0.7.2
+sense_energy==0.8.0
 
 # homeassistant.components.sentry
 sentry-sdk==0.17.3
