@@ -52,26 +52,30 @@ ConditionCheckerType = Callable[[HomeAssistant, TemplateVarsType], bool]
 
 
 async def async_from_config(
-    hass: HomeAssistant, config: ConfigType, config_validation: bool = True
+    hass: HomeAssistant,
+    config: Union[ConfigType, Template],
+    config_validation: bool = True,
 ) -> ConditionCheckerType:
     """Turn a condition configuration into a method.
 
     Should be run on the event loop.
     """
+    if isinstance(config, Template):
+        # We got a condition template, wrap it in a configuration to pass along.
+        config = {
+            CONF_CONDITION: "template",
+            CONF_VALUE_TEMPLATE: config,
+        }
+
+    condition = config.get(CONF_CONDITION)
     for fmt in (ASYNC_FROM_CONFIG_FORMAT, FROM_CONFIG_FORMAT):
-        factory = getattr(
-            sys.modules[__name__], fmt.format(config.get(CONF_CONDITION)), None
-        )
+        factory = getattr(sys.modules[__name__], fmt.format(condition), None)
 
         if factory:
             break
 
     if factory is None:
-        raise HomeAssistantError(
-            'Invalid condition "{}" specified {}'.format(
-                config.get(CONF_CONDITION), config
-            )
-        )
+        raise HomeAssistantError(f'Invalid condition "{condition}" specified {config}')
 
     # Check for partials to properly determine if coroutine function
     check_factory = factory
@@ -437,8 +441,9 @@ def async_template_from_config(
 
 
 def time(
-    before: Optional[dt_util.dt.time] = None,
-    after: Optional[dt_util.dt.time] = None,
+    hass: HomeAssistant,
+    before: Optional[Union[dt_util.dt.time, str]] = None,
+    after: Optional[Union[dt_util.dt.time, str]] = None,
     weekday: Union[None, str, Container[str]] = None,
 ) -> bool:
     """Test if local time condition matches.
@@ -453,8 +458,28 @@ def time(
 
     if after is None:
         after = dt_util.dt.time(0)
+    elif isinstance(after, str):
+        after_entity = hass.states.get(after)
+        if not after_entity:
+            return False
+        after = dt_util.dt.time(
+            after_entity.attributes.get("hour", 23),
+            after_entity.attributes.get("minute", 59),
+            after_entity.attributes.get("second", 59),
+        )
+
     if before is None:
         before = dt_util.dt.time(23, 59, 59, 999999)
+    elif isinstance(before, str):
+        before_entity = hass.states.get(before)
+        if not before_entity:
+            return False
+        before = dt_util.dt.time(
+            before_entity.attributes.get("hour", 23),
+            before_entity.attributes.get("minute", 59),
+            before_entity.attributes.get("second", 59),
+            999999,
+        )
 
     if after < before:
         if not after <= now_time < before:
@@ -488,7 +513,7 @@ def time_from_config(
 
     def time_if(hass: HomeAssistant, variables: TemplateVarsType = None) -> bool:
         """Validate time based if-condition."""
-        return time(before, after, weekday)
+        return time(hass, before, after, weekday)
 
     return time_if
 
@@ -563,9 +588,12 @@ async def async_device_from_config(
 
 
 async def async_validate_condition_config(
-    hass: HomeAssistant, config: ConfigType
-) -> ConfigType:
+    hass: HomeAssistant, config: Union[ConfigType, Template]
+) -> Union[ConfigType, Template]:
     """Validate config."""
+    if isinstance(config, Template):
+        return config
+
     condition = config[CONF_CONDITION]
     if condition in ("and", "not", "or"):
         conditions = []
@@ -576,6 +604,7 @@ async def async_validate_condition_config(
 
     if condition == "device":
         config = cv.DEVICE_CONDITION_SCHEMA(config)
+        assert not isinstance(config, Template)
         platform = await async_get_device_automation_platform(
             hass, config[CONF_DOMAIN], "condition"
         )

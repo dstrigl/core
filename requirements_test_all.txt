@@ -131,7 +131,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.2.1
+aioshelly==0.3.0
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -561,7 +561,7 @@ py-august==0.25.0
 py-canary==0.5.0
 
 # homeassistant.components.melissa
-py-melissa-climate==2.0.0
+py-melissa-climate==2.1.4
 
 # homeassistant.components.nightscout
 py-nightscout==1.2.1
@@ -851,7 +851,7 @@ pytile==4.0.0
 pytraccar==0.9.0
 
 # homeassistant.components.tradfri
-pytradfri[async]==7.0.1
+pytradfri[async]==7.0.2
 
 # homeassistant.components.vera
 pyvera==0.3.9

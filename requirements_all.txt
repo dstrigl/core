@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.2.1
+aioshelly==0.3.0
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -1167,7 +1167,7 @@ py-canary==0.5.0
 py-cpuinfo==7.0.0
 
 # homeassistant.components.melissa
-py-melissa-climate==2.0.0
+py-melissa-climate==2.1.4
 
 # homeassistant.components.nightscout
 py-nightscout==1.2.1
@@ -1805,7 +1805,7 @@ pytraccar==0.9.0
 pytrackr==0.0.5
 
 # homeassistant.components.tradfri
-pytradfri[async]==7.0.1
+pytradfri[async]==7.0.2
 
 # homeassistant.components.trafikverket_train
 # homeassistant.components.trafikverket_weatherstation
@@ -2119,7 +2119,7 @@ temescal==0.3
 temperusb==1.5.3
 
 # homeassistant.components.tensorflow
-# tensorflow==2.2.0
+# tensorflow==2.3.0
 
 # homeassistant.components.powerwall
 tesla-powerwall==0.2.12
@@ -2128,10 +2128,7 @@ tesla-powerwall==0.2.12
 teslajsonpy==0.10.4
 
 # homeassistant.components.tensorflow
-# tf-models-official==2.2.1
-
-# homeassistant.components.tensorflow
-tf-slim==1.1.0
+# tf-models-official==2.3.0
 
 # homeassistant.components.thermoworks_smoke
 thermoworks_smoke==0.1.8
