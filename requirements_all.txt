@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.3.0
+aioshelly==0.3.1
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -995,7 +995,7 @@ numato-gpio==0.8.0
 # homeassistant.components.opencv
 # homeassistant.components.tensorflow
 # homeassistant.components.trend
-numpy==1.19.1
+numpy==1.19.2
 
 # homeassistant.components.oasa_telematics
 oasatelematics==0.3
@@ -2287,7 +2287,7 @@ youtube_dl==2020.07.28
 zengge==0.2
 
 # homeassistant.components.zeroconf
-zeroconf==0.28.4
+zeroconf==0.28.5
 
 # homeassistant.components.zha
 zha-quirks==0.0.44
