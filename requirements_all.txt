@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.3.1
+aioshelly==0.3.2
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -747,7 +747,7 @@ hole==0.5.1
 holidays==0.10.3
 
 # homeassistant.components.frontend
-home-assistant-frontend==20200915.0
+home-assistant-frontend==20200916.0
 
 # homeassistant.components.zwave
 homeassistant-pyozw==0.1.10
@@ -1967,7 +1967,7 @@ sense-hat==2.2.0
 sense_energy==0.8.0
 
 # homeassistant.components.sentry
-sentry-sdk==0.17.5
+sentry-sdk==0.17.6
 
 # homeassistant.components.sharkiq
 sharkiqpy==0.1.8
@@ -2284,7 +2284,7 @@ yeelight==0.5.3
 yeelightsunflower==0.0.10
 
 # homeassistant.components.media_extractor
-youtube_dl==2020.09.06
+youtube_dl==2020.09.14
 
 # homeassistant.components.zengge
 zengge==0.2
