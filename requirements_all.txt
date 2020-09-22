@@ -309,7 +309,7 @@ av==8.0.2
 avri-api==0.1.7
 
 # homeassistant.components.axis
-axis==35
+axis==37
 
 # homeassistant.components.azure_event_hub
 azure-eventhub==5.1.0
@@ -1849,7 +1849,7 @@ pyvolumio==0.1.2
 pywebpush==1.9.2
 
 # homeassistant.components.wemo
-pywemo==0.4.46
+pywemo==0.5.0
 
 # homeassistant.components.wilight
 pywilight==0.0.65
