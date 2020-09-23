@@ -6,6 +6,11 @@
                     "latitude": "Laiuskraad",
                     "longitude": "Pikkuskraad"
                 }
+            },
+            "user": {
+                "data": {
+                    "cloud_api": "Geograafiline asukoht"
+                }
             }
         }
     }
