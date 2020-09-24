@@ -1101,7 +1101,7 @@ pillow==7.2.0
 pizzapi==0.0.3
 
 # homeassistant.components.plex
-plexapi==4.1.0
+plexapi==4.1.1
 
 # homeassistant.components.plex
 plexauth==0.0.5
@@ -2044,7 +2044,7 @@ somecomfort==0.5.2
 somfy-mylink-synergy==1.0.6
 
 # homeassistant.components.sonarr
-sonarr==0.2.3
+sonarr==0.3.0
 
 # homeassistant.components.marytts
 speak2mary==1.4.0
