@@ -194,6 +194,7 @@ homeassistant/components/humidifier/* @home-assistant/core @Shulyaka
 homeassistant/components/hunterdouglas_powerview/* @bdraco
 homeassistant/components/hvv_departures/* @vigonotion
 homeassistant/components/hydrawise/* @ptcryan
+homeassistant/components/hyperion/* @dermotduffy
 homeassistant/components/iammeter/* @lewei50
 homeassistant/components/iaqualink/* @flz
 homeassistant/components/icloud/* @Quentame
@@ -350,6 +351,7 @@ homeassistant/components/raincloud/* @vanstinator
 homeassistant/components/rainforest_eagle/* @gtdiehl @jcalbert
 homeassistant/components/rainmachine/* @bachya
 homeassistant/components/random/* @fabaff
+homeassistant/components/rejseplanen/* @DarkFox
 homeassistant/components/repetier/* @MTrab
 homeassistant/components/rfxtrx/* @danielhiversen @elupus
 homeassistant/components/ring/* @balloob
