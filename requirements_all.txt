@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.3.2
+aioshelly==0.3.3
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -383,7 +383,7 @@ boto3==1.9.252
 bravia-tv==1.0.6
 
 # homeassistant.components.broadlink
-broadlink==0.14.1
+broadlink==0.15.0
 
 # homeassistant.components.brother
 brother==0.1.17
