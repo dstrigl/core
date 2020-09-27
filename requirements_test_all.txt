@@ -336,6 +336,9 @@ gios==0.1.4
 # homeassistant.components.glances
 glances_api==0.2.0
 
+# homeassistant.components.goalzero
+goalzero==0.1.4
+
 # homeassistant.components.gogogate2
 gogogate2-api==2.0.3
 
@@ -573,7 +576,7 @@ py-canary==0.5.0
 py-melissa-climate==2.1.4
 
 # homeassistant.components.nightscout
-py-nightscout==1.2.1
+py-nightscout==1.2.2
 
 # homeassistant.components.seventeentrack
 py17track==2.2.2
@@ -848,7 +851,7 @@ python-tado==0.8.1
 python-twitch-client==0.6.0
 
 # homeassistant.components.velbus
-python-velbus==2.0.45
+python-velbus==2.0.46
 
 # homeassistant.components.awair
 python_awair==0.1.1

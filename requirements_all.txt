@@ -511,7 +511,7 @@ dovado==0.4.1
 dsmr_parser==0.18
 
 # homeassistant.components.dwd_weather_warnings
-dwdwfsapi==1.0.2
+dwdwfsapi==1.0.3
 
 # homeassistant.components.dweet
 dweepy==0.3.0
@@ -667,6 +667,9 @@ glances_api==0.2.0
 
 # homeassistant.components.gntp
 gntp==1.0.3
+
+# homeassistant.components.goalzero
+goalzero==0.1.4
 
 # homeassistant.components.gogogate2
 gogogate2-api==2.0.3
@@ -1183,7 +1186,7 @@ py-cpuinfo==7.0.0
 py-melissa-climate==2.1.4
 
 # homeassistant.components.nightscout
-py-nightscout==1.2.1
+py-nightscout==1.2.2
 
 # homeassistant.components.schluter
 py-schluter==0.1.7
@@ -1785,7 +1788,7 @@ python-telnet-vlc==1.0.4
 python-twitch-client==0.6.0
 
 # homeassistant.components.velbus
-python-velbus==2.0.45
+python-velbus==2.0.46
 
 # homeassistant.components.vlc
 python-vlc==1.1.2
