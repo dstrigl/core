@@ -1055,7 +1055,7 @@ withings-api==2.1.6
 wled==0.4.4
 
 # homeassistant.components.wolflink
-wolf_smartset==0.1.4
+wolf_smartset==0.1.6
 
 # homeassistant.components.bluesound
 # homeassistant.components.rest
@@ -1086,10 +1086,10 @@ zigpy-xbee==0.13.0
 zigpy-zigate==0.6.2
 
 # homeassistant.components.zha
-zigpy-znp==0.1.1
+zigpy-znp==0.2.0
 
 # homeassistant.components.zha
-zigpy==0.24.1
+zigpy==0.24.3
 
 # homeassistant.components.zoneminder
 zm-py==0.4.0
