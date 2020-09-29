@@ -55,7 +55,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             CONF_STATION_ID,
             station_id,
         )
-        #return False
+        # return False
 
     probe = ZamgData(station_id=station_id)
     try:
