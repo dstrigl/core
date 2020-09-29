@@ -50,12 +50,12 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         latitude, longitude, hass.config.config_dir
     )
     if station_id not in zamg_stations(hass.config.config_dir):
-        _LOGGER.error(
+        _LOGGER.warning(
             "Configured ZAMG %s (%s) is not a known station",
             CONF_STATION_ID,
             station_id,
         )
-        return False
+        #return False
 
     probe = ZamgData(station_id=station_id)
     try:
