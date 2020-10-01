@@ -806,7 +806,7 @@ pysmartthings==0.7.3
 pysoma==0.0.10
 
 # homeassistant.components.sonos
-pysonos==0.0.33
+pysonos==0.0.34
 
 # homeassistant.components.spc
 pyspcwebgw==0.4.0
@@ -936,7 +936,7 @@ sharkiqpy==0.1.8
 simplehound==0.3
 
 # homeassistant.components.simplisafe
-simplisafe-python==9.3.3
+simplisafe-python==9.4.1
 
 # homeassistant.components.sleepiq
 sleepyq==0.7
@@ -1089,7 +1089,7 @@ zigpy-zigate==0.6.2
 zigpy-znp==0.2.0
 
 # homeassistant.components.zha
-zigpy==0.24.3
+zigpy==0.25.0
 
 # homeassistant.components.zoneminder
 zm-py==0.4.0
