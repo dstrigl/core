@@ -278,7 +278,7 @@ eebrightbox==0.0.4
 elgato==0.2.0
 
 # homeassistant.components.elkm1
-elkm1-lib==0.8.0
+elkm1-lib==0.8.1
 
 # homeassistant.components.mobile_app
 emoji==0.5.4
@@ -1099,6 +1099,3 @@ zigpy-znp==0.2.1
 
 # homeassistant.components.zha
 zigpy==0.26.0
-
-# homeassistant.components.zoneminder
-zm-py==0.4.0
