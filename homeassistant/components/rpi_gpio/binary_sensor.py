@@ -1,6 +1,4 @@
 """Support for binary sensor using RPi GPIO."""
-import logging
-
 import voluptuous as vol
 
 from homeassistant.components import rpi_gpio
@@ -20,8 +18,6 @@ from . import (
     PLATFORMS,
     PULL_MODES,
 )
-
-_LOGGER = logging.getLogger(__name__)
 
 CONF_PORTS = "ports"
 

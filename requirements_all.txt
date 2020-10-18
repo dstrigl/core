@@ -369,9 +369,6 @@ blockchain==1.4.4
 # homeassistant.components.bme680
 # bme680==1.0.5
 
-# homeassistant.components.bom
-bomradarloop==0.1.5
-
 # homeassistant.components.bond
 bond-api==0.1.8
 
@@ -726,13 +723,13 @@ habitipy==0.2.0
 hangups==0.4.11
 
 # homeassistant.components.cloud
-hass-nabucasa==0.37.0
+hass-nabucasa==0.37.1
 
 # homeassistant.components.splunk
 hass_splunk==0.1.1
 
 # homeassistant.components.tasmota
-hatasmota==0.0.16
+hatasmota==0.0.18
 
 # homeassistant.components.jewish_calendar
 hdate==0.9.5
@@ -765,7 +762,7 @@ home-assistant-frontend==20201001.2
 homeassistant-pyozw==0.1.10
 
 # homeassistant.components.home_connect
-homeconnect==0.5
+homeconnect==0.6.3
 
 # homeassistant.components.homematicip_cloud
 homematicip==0.11.0
@@ -776,6 +773,9 @@ horimote==0.4.1
 # homeassistant.components.google
 # homeassistant.components.remember_the_milk
 httplib2==0.10.3
+
+# homeassistant.components.rest
+httpx==0.16.1
 
 # homeassistant.components.huawei_lte
 huawei-lte-api==1.4.12
@@ -1019,7 +1019,7 @@ oasatelematics==0.3
 oauth2client==4.0.0
 
 # homeassistant.components.oem
-oemthermostat==1.1
+oemthermostat==1.1.1
 
 # homeassistant.components.omnilogic
 omnilogic==0.4.2
@@ -1294,7 +1294,7 @@ pycfdns==0.0.1
 pychannels==1.0.0
 
 # homeassistant.components.cast
-pychromecast==7.5.0
+pychromecast==7.5.1
 
 # homeassistant.components.cmus
 pycmus==0.1.1
@@ -1354,7 +1354,7 @@ pyedimax==0.2.1
 pyeight==0.1.4
 
 # homeassistant.components.emby
-pyemby==1.6
+pyemby==1.7
 
 # homeassistant.components.envisalink
 pyenvisalink==4.0
@@ -1451,7 +1451,7 @@ pyirishrail==0.0.2
 pyiss==1.0.1
 
 # homeassistant.components.isy994
-pyisy==2.0.2
+pyisy==2.1.0
 
 # homeassistant.components.itach
 pyitachip2ir==0.0.7
