@@ -1,5 +1,6 @@
 """Allows to configure a switch using RPi GPIO."""
 import logging
+
 import voluptuous as vol
 
 from homeassistant.components.switch import PLATFORM_SCHEMA
