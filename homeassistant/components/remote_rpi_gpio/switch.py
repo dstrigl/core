@@ -1,4 +1,5 @@
 """Allows to configure a switch using RPi GPIO."""
+import logging
 import voluptuous as vol
 
 from homeassistant.components.switch import PLATFORM_SCHEMA
@@ -8,6 +9,8 @@ from homeassistant.helpers.entity import ToggleEntity
 
 from . import CONF_INVERT_LOGIC, DEFAULT_INVERT_LOGIC
 from .. import remote_rpi_gpio
+
+_LOGGER = logging.getLogger(__name__)
 
 CONF_PORTS = "ports"
 
@@ -29,12 +32,17 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     ports = config[CONF_PORTS]
 
     devices = []
-    for port, name in ports.items():
+    for port_num, port_name in ports.items():
         try:
-            led = remote_rpi_gpio.setup_output(address, port, invert_logic)
+            led = remote_rpi_gpio.setup_output(address, port_num, invert_logic)
         except (ValueError, IndexError, KeyError, OSError):
-            return
-        new_switch = RemoteRPiGPIOSwitch(name, led)
+            _LOGGER.exception(
+                "Unexpected error while setting up Remote GPIO output %d @ %s",
+                port_num,
+                address,
+            )
+            continue
+        new_switch = RemoteRPiGPIOSwitch(port_name, led)
         devices.append(new_switch)
 
     add_entities(devices)

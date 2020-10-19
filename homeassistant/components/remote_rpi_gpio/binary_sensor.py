@@ -1,4 +1,5 @@
 """Support for binary sensor using RPi GPIO."""
+import logging
 import requests
 import voluptuous as vol
 
@@ -17,6 +18,8 @@ from . import (
     PULL_MODES,
 )
 from .. import remote_rpi_gpio
+
+_LOGGER = logging.getLogger(__name__)
 
 CONF_PORTS = "ports"
 
