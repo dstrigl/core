@@ -155,7 +155,7 @@ airly==1.0.0
 ambiclimate==0.2.1
 
 # homeassistant.components.androidtv
-androidtv[async]==0.0.50
+androidtv[async]==0.0.51
 
 # homeassistant.components.apns
 apns2==0.3.0
@@ -180,7 +180,7 @@ av==8.0.2
 avri-api==0.1.7
 
 # homeassistant.components.axis
-axis==37
+axis==39
 
 # homeassistant.components.azure_event_hub
 azure-eventhub==5.1.0
@@ -364,7 +364,7 @@ hangups==0.4.11
 hass-nabucasa==0.37.1
 
 # homeassistant.components.tasmota
-hatasmota==0.0.18
+hatasmota==0.0.19
 
 # homeassistant.components.jewish_calendar
 hdate==0.9.5
@@ -748,7 +748,7 @@ pymodbus==2.3.0
 pymonoprice==0.3
 
 # homeassistant.components.myq
-pymyq==2.0.5
+pymyq==2.0.8
 
 # homeassistant.components.nut
 pynut2==2.1.2
