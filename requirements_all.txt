@@ -221,7 +221,7 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.3.4
+aioshelly==0.4.0
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
@@ -679,6 +679,9 @@ google-cloud-pubsub==0.39.1
 
 # homeassistant.components.google_cloud
 google-cloud-texttospeech==0.4.0
+
+# homeassistant.components.nest
+google-nest-sdm==0.1.6
 
 # homeassistant.components.google_travel_time
 googlemaps==2.5.1
@@ -1996,7 +1999,7 @@ sense-hat==2.2.0
 sense_energy==0.8.1
 
 # homeassistant.components.sentry
-sentry-sdk==0.18.0
+sentry-sdk==0.19.1
 
 # homeassistant.components.sharkiq
 sharkiqpy==0.1.8
