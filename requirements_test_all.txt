@@ -109,7 +109,7 @@ aioguardian==1.0.1
 aioharmony==0.2.6
 
 # homeassistant.components.homekit_controller
-aiohomekit==0.2.53
+aiohomekit==0.2.54
 
 # homeassistant.components.emulated_hue
 # homeassistant.components.http
@@ -359,6 +359,9 @@ greeclimate==0.9.0
 
 # homeassistant.components.griddy
 griddypower==0.1.0
+
+# homeassistant.components.profiler
+guppy3==3.1.0
 
 # homeassistant.components.ffmpeg
 ha-ffmpeg==2.0
