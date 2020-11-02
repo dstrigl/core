@@ -737,7 +737,7 @@ pylibrespot-java==0.1.0
 pylitejet==0.1
 
 # homeassistant.components.lutron_caseta
-pylutron-caseta==0.7.0
+pylutron-caseta==0.7.1
 
 # homeassistant.components.mailgun
 pymailgunner==1.4
@@ -938,7 +938,7 @@ rokuecp==0.6.0
 roombapy==1.6.1
 
 # homeassistant.components.roon
-roonapi==0.0.23
+roonapi==0.0.25
 
 # homeassistant.components.rpi_power
 rpi-bad-power==0.0.3
@@ -1131,4 +1131,4 @@ zigpy-zigate==0.6.2
 zigpy-znp==0.2.2
 
 # homeassistant.components.zha
-zigpy==0.26.0
+zigpy==0.27.0
