@@ -137,13 +137,13 @@ aiopvpc==2.0.2
 aiopylgtv==0.3.3
 
 # homeassistant.components.shelly
-aioshelly==0.4.0
+aioshelly==0.5.0
 
 # homeassistant.components.switcher_kis
 aioswitcher==1.2.1
 
 # homeassistant.components.unifi
-aiounifi==23
+aiounifi==25
 
 # homeassistant.components.yandex_transport
 aioymaps==1.1.0
@@ -622,7 +622,7 @@ py_nextbusnext==0.1.4
 pyaehw4a1==0.3.9
 
 # homeassistant.components.airvisual
-pyairvisual==5.0.3
+pyairvisual==5.0.4
 
 # homeassistant.components.almond
 pyalmond==0.0.2
@@ -634,7 +634,7 @@ pyarlo==0.2.3
 pyatag==0.3.4.4
 
 # homeassistant.components.netatmo
-pyatmo==4.1.0
+pyatmo==4.2.0
 
 # homeassistant.components.blackbird
 pyblackbird==0.5
@@ -957,7 +957,7 @@ samsungtvws==1.4.0
 sense_energy==0.8.1
 
 # homeassistant.components.sentry
-sentry-sdk==0.19.1
+sentry-sdk==0.19.2
 
 # homeassistant.components.sharkiq
 sharkiqpy==0.1.8
