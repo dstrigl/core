@@ -201,7 +201,7 @@ blinkpy==0.16.3
 bond-api==0.1.8
 
 # homeassistant.components.braviatv
-bravia-tv==1.0.6
+bravia-tv==1.0.8
 
 # homeassistant.components.broadlink
 broadlink==0.16.0
@@ -355,7 +355,7 @@ google-api-python-client==1.6.4
 google-cloud-pubsub==2.1.0
 
 # homeassistant.components.nest
-google-nest-sdm==0.1.13
+google-nest-sdm==0.1.14
 
 # homeassistant.components.gree
 greeclimate==0.9.5
@@ -376,7 +376,7 @@ hangups==0.4.11
 hass-nabucasa==0.37.1
 
 # homeassistant.components.tasmota
-hatasmota==0.0.27
+hatasmota==0.0.29
 
 # homeassistant.components.jewish_calendar
 hdate==0.9.12
@@ -554,7 +554,7 @@ pillow==7.2.0
 plexapi==4.2.0
 
 # homeassistant.components.plex
-plexauth==0.0.5
+plexauth==0.0.6
 
 # homeassistant.components.plex
 plexwebsocket==0.0.12
@@ -743,7 +743,7 @@ pylibrespot-java==0.1.0
 pylitejet==0.1
 
 # homeassistant.components.lutron_caseta
-pylutron-caseta==0.7.1
+pylutron-caseta==0.7.2
 
 # homeassistant.components.mailgun
 pymailgunner==1.4
