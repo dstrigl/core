@@ -8,7 +8,7 @@
             "docker_version": "Docker",
             "host_os": "Home Assistant OS",
             "installation_type": "Installation Type",
-            "os_name": "Operating System Name",
+            "os_name": "Operating System Family",
             "os_version": "Operating System Version",
             "python_version": "Python Version",
             "supervisor": "Supervisor",
