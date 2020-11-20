@@ -511,7 +511,7 @@ doorbirdpy==2.1.0
 dovado==0.4.1
 
 # homeassistant.components.dsmr
-dsmr_parser==0.18
+dsmr_parser==0.23
 
 # homeassistant.components.dwd_weather_warnings
 dwdwfsapi==1.0.3
@@ -2098,6 +2098,9 @@ spotipy==2.16.1
 # homeassistant.components.sql
 sqlalchemy==1.3.20
 
+# homeassistant.components.srp_energy
+srpenergy==1.3.2
+
 # homeassistant.components.starline
 starline==0.1.3
 
@@ -2356,7 +2359,7 @@ zigpy-deconz==0.11.0
 zigpy-xbee==0.13.0
 
 # homeassistant.components.zha
-zigpy-zigate==0.7.2
+zigpy-zigate==0.7.3
 
 # homeassistant.components.zha
 zigpy-znp==0.2.2
