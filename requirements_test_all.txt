@@ -6,9 +6,6 @@
 # homeassistant.components.homekit
 HAP-python==3.0.0
 
-# homeassistant.components.plugwise
-Plugwise_Smile==1.6.0
-
 # homeassistant.components.flick_electric
 PyFlick==0.0.2
 
@@ -561,6 +558,9 @@ plexauth==0.0.6
 
 # homeassistant.components.plex
 plexwebsocket==0.0.12
+
+# homeassistant.components.plugwise
+plugwise==0.8.3
 
 # homeassistant.components.plum_lightpad
 plumlightpad==0.0.11
@@ -1146,4 +1146,4 @@ zigpy-zigate==0.7.3
 zigpy-znp==0.2.2
 
 # homeassistant.components.zha
-zigpy==0.27.1
+zigpy==0.28.0
