@@ -2000,7 +2000,7 @@ sense-hat==2.2.0
 sense_energy==0.8.1
 
 # homeassistant.components.sentry
-sentry-sdk==0.19.3
+sentry-sdk==0.19.4
 
 # homeassistant.components.sharkiq
 sharkiqpy==0.1.8
@@ -2065,7 +2065,7 @@ solaredge-local==0.2.0
 solaredge==0.0.2
 
 # homeassistant.components.solax
-solax==0.2.4
+solax==0.2.5
 
 # homeassistant.components.honeywell
 somecomfort==0.5.2
