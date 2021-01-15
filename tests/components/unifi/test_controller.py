@@ -2,6 +2,7 @@
 from collections import deque
 from copy import deepcopy
 from datetime import timedelta
+from unittest.mock import patch
 
 import aiounifi
 import pytest
@@ -35,7 +36,6 @@ from homeassistant.const import (
 )
 from homeassistant.setup import async_setup_component
 
-from tests.async_mock import patch
 from tests.common import MockConfigEntry
 
 CONTROLLER_HOST = {
@@ -292,6 +292,22 @@ async def test_get_controller_login_failed(hass):
     with patch("aiounifi.Controller.check_unifi_os", return_value=True), patch(
         "aiounifi.Controller.login", side_effect=aiounifi.Unauthorized
     ), pytest.raises(AuthenticationRequired):
+        await get_controller(hass, **CONTROLLER_DATA)
+
+
+async def test_get_controller_controller_bad_gateway(hass):
+    """Check that get_controller can handle controller being unavailable."""
+    with patch("aiounifi.Controller.check_unifi_os", return_value=True), patch(
+        "aiounifi.Controller.login", side_effect=aiounifi.BadGateway
+    ), pytest.raises(CannotConnect):
+        await get_controller(hass, **CONTROLLER_DATA)
+
+
+async def test_get_controller_controller_service_unavailable(hass):
+    """Check that get_controller can handle controller being unavailable."""
+    with patch("aiounifi.Controller.check_unifi_os", return_value=True), patch(
+        "aiounifi.Controller.login", side_effect=aiounifi.ServiceUnavailable
+    ), pytest.raises(CannotConnect):
         await get_controller(hass, **CONTROLLER_DATA)
 
 
