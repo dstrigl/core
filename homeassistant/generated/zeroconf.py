@@ -90,6 +90,12 @@ ZEROCONF = {
             "domain": "ipp"
         }
     ],
+    "_kizbox._tcp.local.": [
+        {
+            "domain": "somfy",
+            "name": "gateway*"
+        }
+    ],
     "_mediaremotetv._tcp.local.": [
         {
             "domain": "apple_tv"
@@ -178,5 +184,6 @@ HOMEKIT = {
     "Welcome": "netatmo",
     "Wemo": "wemo",
     "iSmartGate": "gogogate2",
+    "iZone": "izone",
     "tado": "tado"
 }
