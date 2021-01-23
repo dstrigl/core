@@ -3,7 +3,7 @@
   "name": "Axis",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/axis",
-  "requirements": ["axis==42"],
+  "requirements": ["axis==43"],
   "zeroconf": [
     { "type": "_axis-video._tcp.local.", "macaddress": "00408C*" },
     { "type": "_axis-video._tcp.local.", "macaddress": "ACCC8E*" },
@@ -15,5 +15,6 @@
     { "hostname": "axis-b8a44f*", "macaddress": "B8A44F*" }
   ],
   "after_dependencies": ["mqtt"],
-  "codeowners": ["@Kane610"]
+  "codeowners": ["@Kane610"],
+  "quality_scale": "platinum"
 }
